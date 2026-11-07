@@ -221,21 +221,28 @@ aside button[data-p=admin]{display:none}
 .burger:hover{background:var(--k4)}
 .burger svg{width:26px;height:26px;fill:currentColor}
 #toast{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:var(--y);color:var(--k);font-weight:900;padding:10px 18px;border-radius:30px;z-index:120;display:none;max-width:90vw;text-align:center}
-.mgrid.ggrid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.gc{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:7px;background:linear-gradient(180deg,var(--k3),var(--k2));border:2px solid var(--k3);border-radius:18px;padding:12px;text-align:left;overflow:hidden;transition:transform .12s,border-color .12s}
-.gc:hover{background:linear-gradient(180deg,var(--k3),var(--k2));border-color:var(--y);transform:translateY(-2px)}
-.gi{max-width:none;width:100%;aspect-ratio:1;background:radial-gradient(circle at 50% 40%,var(--k4),var(--k1) 85%);border:2px solid var(--k4);border-radius:14px;padding:8px;margin:0}
-.gn{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:16px;line-height:1.25;min-height:2.5em;text-align:left;word-break:break-word;cursor:pointer}
-.gby{font-size:12.5px;opacity:.7;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gmeta{display:flex;align-items:center;min-height:22px}
+.mgrid.ggrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.gc{display:flex;flex-direction:column;align-items:stretch;gap:6px;background:var(--k2);border:2px solid var(--k3);border-radius:12px;padding:10px;text-align:left;transition:none;transform:none;overflow:visible}
+.gc:hover{background:var(--k2);border-color:var(--k4);transform:none}
+.gi{max-width:none;width:100%;aspect-ratio:1;background:var(--k3);border:0;border-radius:10px;padding:6px;margin:0;box-shadow:none}
+.gn{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px;font-weight:800;line-height:1.2;text-align:left;cursor:pointer}
+.gby{font-size:13px;opacity:.7;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gmeta{display:flex;align-items:center}
 .gv{display:flex;gap:6px}
-.gv button{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;background:var(--k1);color:var(--y);border:2px solid transparent;border-radius:10px;height:38px;font:inherit;font-weight:800;font-size:13px;cursor:pointer;padding:0 6px;min-width:0}
+.gv button{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;background:var(--k3);color:var(--y);border:0;border-radius:8px;height:36px;font:inherit;font-weight:800;font-size:14px;cursor:pointer;padding:0 6px;min-width:0}
 .gv button svg{width:18px;height:18px;fill:currentColor;flex:none}
 .gv button:hover{background:var(--k4)}
 .gv button.on{background:var(--y);color:var(--k)}
-.gp{height:44px;background:var(--y);color:var(--k);border:0;border-radius:12px;font:inherit;font-weight:900;font-size:17px;letter-spacing:1.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.gp svg{width:18px;height:18px;fill:currentColor}
+.gp{height:40px;background:var(--y);color:var(--k);border:0;border-radius:8px;font:inherit;font-weight:900;font-size:16px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.gp svg{width:16px;height:16px;fill:currentColor}
 .gp:hover{background:var(--y2)}
+.ov#load{z-index:5;align-items:center;justify-content:center;gap:8px;padding:24px}
+#load .lic{width:min(180px,40vw);aspect-ratio:1;background:var(--k3);border-radius:12px;padding:10px;margin-bottom:10px}
+#load .lic svg{width:100%;height:100%;display:block}
+#lName{font-size:28px;font-weight:900;text-align:center;word-break:break-word;max-width:90vw}
+#lBy{font-size:16px;font-weight:700;opacity:.7;text-align:center}
+#lText{position:absolute;right:calc(22px + env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));font-size:20px;font-weight:900;letter-spacing:2px}
+#lDots{display:inline-block;width:1.6em;text-align:left}
 </style>
 </head>
 <body>
@@ -484,6 +491,7 @@ aside button[data-p=admin]{display:none}
 </div>
 <div class="ov hide" id="play">
   <canvas id="pc"></canvas>
+  <div class="ov hide" id="load"><div class="lic" id="lIcon"></div><div id="lName"></div><div id="lBy"></div><div id="lText">LOADING<span id="lDots">.</span></div></div>
   <div class="phud"><button class="burger" id="pMenu" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 6h16v2.500H4zm0 5h16v2.500H4zm0 5h16v2.500H4z"/></svg></button></div>
   <div id="ptouch"><div class="pt"><button data-k="l" aria-label="Left">&lsaquo;</button><button data-k="r" aria-label="Right">&rsaquo;</button></div><button data-k="j" aria-label="Jump">&uarr;</button></div>
 </div>
@@ -1769,7 +1777,7 @@ const isCont=n=>n&&n.type!=="part";
 function stMark(){S.dirty=true}
 function stLater(){if(!stRaf)stRaf=requestAnimationFrame(stDraw)}
 function stResize(){
-  const r=$("#stWrap").getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  const r=$("#stWrap").getBoundingClientRect(),dpr=qdpr();
   stW=r.width;stH=r.height;stCv.width=Math.max(1,Math.round(stW*dpr));stCv.height=Math.max(1,Math.round(stH*dpr));
   if(S.on&&!S.camInit&&stW>0){S.camInit=true;S.cam.x=S.spawn.x*T-stW/(2*S.Z);S.cam.y=S.spawn.y*T-stH/(2*S.Z)}
   stLater();
@@ -1777,7 +1785,7 @@ function stResize(){
 new ResizeObserver(stResize).observe($("#stWrap"));
 function stDraw(){
   stRaf=0;if(!S.on)return;
-  const g=stG,dpr=window.devicePixelRatio||1,Z=S.Z,cx=S.cam.x,cy=S.cam.y;
+  const g=stG,dpr=qdpr(),Z=S.Z,cx=S.cam.x,cy=S.cam.y;
   g.setTransform(1,0,0,1,0,0);g.fillStyle="#161616";g.fillRect(0,0,stCv.width,stCv.height);
   g.setTransform(dpr*Z,0,0,dpr*Z,-cx*Z*dpr,-cy*Z*dpr);
   const x1=cx+stW/Z,y1=cy+stH/Z;
@@ -2057,9 +2065,9 @@ function svgSprite(key,mkInner){
   im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 280" width="260" height="280">'+inner+'</svg>');
   return null;
 }
-const HAM='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48"><g transform="translate(12 12) scale(.86) translate(-12 -12) rotate(40 12 12)"><rect x="10.3" y="8" width="3.4" height="15.5" rx="1.5" fill="#A2845E" stroke="#6B4423" stroke-width="1"/><rect x="10.3" y="15" width="3.4" height="1.4" fill="#6B4423" opacity=".5"/><rect x="10.3" y="18" width="3.4" height="1.4" fill="#6B4423" opacity=".5"/><rect x="3.6" y="1.8" width="16.8" height="8" rx="2.4" fill="#C0C0C0" stroke="#3A3A3C" stroke-width="1.3"/><rect x="3.6" y="1.8" width="5.2" height="8" rx="2.4" fill="#8E8E93" opacity=".6"/><rect x="5.6" y="3.2" width="12.8" height="1.9" rx=".95" fill="#fff" opacity=".75"/><rect x="15.4" y="1.8" width="5" height="8" rx="2.4" fill="#3A3A3C" opacity=".25"/></g></svg>';
+const HAM='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96"><g transform="translate(12 12) rotate(-45) scale(.0132) translate(-442 -960)" fill="#fff"><rect x="50" y="28" width="150" height="210" rx="38"/><path d="M200 70C250 92 295 62 332 32L382 18C522 30 622 82 702 172C762 242 802 312 836 372C760 332 652 292 560 262L505 308L408 314L372 284C338 250 318 236 298 232L200 232Z"/><rect x="372" y="322" width="132" height="22" rx="10"/><rect x="372" y="351" width="132" height="22" rx="10"/><rect x="372" y="380" width="132" height="22" rx="10"/><rect x="384" y="410" width="108" height="520" rx="12"/><path d="M378 945Q400 934 500 941Q526 946 523 990C531 1300 561 1600 556 1800Q551 1862 500 1892Q440 1904 400 1889Q345 1864 352 1792C365 1600 386 1300 378 945Z"/></g></svg>';
 let hamC=null;
-(function(){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=48;c.height=48;c.getContext("2d").drawImage(im,0,0,48,48);hamC=c};im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(HAM)})();
+(function(){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=96;c.height=96;c.getContext("2d").drawImage(im,0,0,96,96);hamC=c};im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(HAM)})();
 
 /* ----- Servers (multiplayer) ----- */
 const liveCount=(p,t)=>Object.keys(p||{}).filter(k=>t-p[k]<LIVE).length;
@@ -2110,20 +2118,22 @@ async function srvLeave(sid,uid){
 function netStart(g,sid){
   const uid=uidNow(),x=window.BEANZ.get();
   NET.sid=sid;NET.gid=g.id;NET.uid=uid;NET.gname=g.name;NET.name=myName();NET.color=x.avatar.color;NET.face=x.avatar.face;
-  NET.pl=new Map();NET.lx=NaN;NET.ly=NaN;NET.lastSend=0;
+  NET.pl=new Map();NET.lx=NaN;NET.ly=NaN;NET.ld=NaN;NET.lg=NaN;NET.lastSend=0;
   NET.unsubs.push(onSnapshot(query(collection(db,"ppos"),where("sid","==",sid)),s=>{
     const now=performance.now(),wall=Date.now();
     s.docChanges().forEach(c=>{
       const x=c.doc.data(),id=x.uid;if(id===uid)return;
       if(c.type==="removed"){NET.pl.delete(id);return}
       let p=NET.pl.get(id);
+      const d=x.d===1||x.d===-1?x.d:0,vy=typeof x.vy==="number"?Math.max(-900,Math.min(900,x.vy)):0;
       if(!p){
         if(wall-x.t>20000)return;
-        p={x:x.x,y:x.y,rx:x.x,ry:x.y,vx:0,vy:0,t:x.t,at:now};NET.pl.set(id,p);
+        p={x:x.x,y:x.y,rx:x.x,ry:x.y,vy,d,t:x.t,at:now};NET.pl.set(id,p);
       }else{
-        const dt=(x.t-p.t)/1000;
-        if(dt>.05&&dt<1.5){p.vx=(x.x-p.x)/dt;p.vy=(x.y-p.y)/dt}else{p.vx=0;p.vy=0}
-        p.x=x.x;p.y=x.y;p.t=x.t;p.at=now;
+        const ex=x.x-p.x,ey=x.y-p.y;
+        if(Math.hypot(ex,ey)>220){p.x=x.x;p.y=x.y}
+        else{p.x+=ex*.6;p.y+=ey*.6}
+        p.vy=vy;p.d=d;p.t=x.t;p.at=now;
       }
       p.n=String(x.n||"Player").slice(0,20);p.c=/^#[0-9A-Fa-f]{6}$/.test(x.c)?x.c:"#FFD60A";p.fc=FACES[x.fc]?x.fc:"smile";
     });
@@ -2134,14 +2144,16 @@ function netStart(g,sid){
     setDoc(doc(db,"presence",uid),{gid:g.id,gname:g.name,sid,t}).catch(()=>{});
   };
   beat();NET.hbT=setInterval(beat,10000);
-  NET.sendT=setInterval(netSend,250);
+  NET.sendT=setInterval(netSend,50);
 }
 function netSend(){
   if(!NET.sid||!P.on)return;
-  const x=Math.round(P.x),y=Math.round(P.y),n=performance.now();
-  if(x===NET.lx&&y===NET.ly&&n-NET.lastSend<2000)return;
-  NET.lx=x;NET.ly=y;NET.lastSend=n;
-  setDoc(doc(db,"ppos",NET.sid+"_"+NET.uid),{sid:NET.sid,uid:NET.uid,x,y,n:NET.name,c:NET.color,fc:NET.face,t:Date.now()}).catch(()=>{});
+  const x=Math.round(P.x),y=Math.round(P.y),n=performance.now(),k=P.keys;
+  const d=P.pause?0:(k.r?1:0)-(k.l?1:0),gr=P.ground?1:0;
+  const changed=d!==NET.ld||gr!==NET.lg,moved=x!==NET.lx||y!==NET.ly,el=n-NET.lastSend;
+  if(!((changed&&el>=70)||(moved&&el>=200)||el>=2000))return;
+  NET.lx=x;NET.ly=y;NET.ld=d;NET.lg=gr;NET.lastSend=n;
+  setDoc(doc(db,"ppos",NET.sid+"_"+NET.uid),{sid:NET.sid,uid:NET.uid,x,y,d,vy:Math.round(P.vy),n:NET.name,c:NET.color,fc:NET.face,t:Date.now()}).catch(()=>{});
 }
 function netStop(){
   const sid=NET.sid,uid=NET.uid;
@@ -2171,11 +2183,38 @@ async function joinFriend(uid,pr){
   }catch(e){console.error(e);toast("You cannot join this game")}
 }
 
+/* ----- Graphics quality ----- */
+function gq(){
+  const q=st.quality;
+  if(q==="Low")return{cap:1,mul:.75,fps:30,smooth:false};
+  if(q==="High")return{cap:2,mul:1,fps:0,smooth:true};
+  return{cap:1.5,mul:1,fps:60,smooth:true};
+}
+function qdpr(){const Q=gq();return Math.min(Q.cap,window.devicePixelRatio||1)*Q.mul}
+
+/* ----- Loading screen ----- */
+const LD={t:0,i:0,at:0,h:0};
+function showLoad(g){
+  clearTimeout(LD.h);
+  $("#lIcon").innerHTML=g.icon?iconSVG(g.icon):"";
+  $("#lName").textContent=g.name||"";
+  $("#lBy").textContent=g.creatorName?"by "+g.creatorName:"";
+  LD.i=0;$("#lDots").textContent=".";
+  clearInterval(LD.t);LD.t=setInterval(()=>{LD.i=(LD.i+1)%3;$("#lDots").textContent=".".repeat(LD.i+1)},400);
+  LD.at=performance.now();$("#load").classList.remove("hide");
+}
+function hideLoad(cb,now){
+  clearTimeout(LD.h);
+  const done=()=>{clearInterval(LD.t);$("#load").classList.add("hide");if(cb)cb()};
+  const w=now?0:Math.max(0,1000-(performance.now()-LD.at));
+  if(w>0)LD.h=setTimeout(done,w);else done();
+}
+
 /* ----- Play ----- */
 async function startPlay(g,opt){
   opt=opt||{};P.opt=opt;P.g=g;P.test=!!opt.test;P.kind="";
   cancelAnimationFrame(P.raf);closeDlg();netStop();
-  $("#play").classList.remove("hide");
+  $("#play").classList.remove("hide");showLoad(g);
   P.on=true;P.pause=true;P.keys.l=P.keys.r=P.keys.j=0;
   const cv=$("#pc"),c=cv.getContext("2d");c.setTransform(1,0,0,1,0,0);c.fillStyle="#0b0b0b";c.fillRect(0,0,cv.width,cv.height);
   let place=opt.place||null;
@@ -2209,7 +2248,7 @@ async function startPlay(g,opt){
   beginPlay(place,sv);
 }
 function kick(code,reason){
-  P.pause=true;P.kind="kick";
+  P.pause=true;P.kind="kick";hideLoad(null,true);
   dlg({title:"Error "+code,sub:"You were kicked from this game",reason:"Reason: "+reason,btns:[{t:"Retry",fn:()=>startPlay(P.g,P.opt)},{t:"Leave",alt:1,fn:leavePlay}]});
 }
 function beginPlay(place,sv){
@@ -2218,7 +2257,7 @@ function beginPlay(place,sv){
   let mb=0;P.parts.forEach(n=>{mb=Math.max(mb,(n.y+n.h)*T)});P.maxY=mb+1500;
   P.sp={x:place.spawn.x*T+(T-PW)/2,y:(place.spawn.y+1)*T-PH};
   respawn();P.sprite=null;SPR.delete(P.myKey);P.myKey="me"+Date.now()+Math.random();
-  P.camInit=false;P.pause=false;P.kind="";P.last=performance.now();
+  P.camInit=false;P.pause=true;P.kind="";P.last=performance.now();hideLoad(()=>{if(P.on&&!P.kind)P.pause=false});
   if(sv)netStart(P.g,sv.sid);
   P.raf=requestAnimationFrame(ploop);
 }
@@ -2235,22 +2274,32 @@ function pStep(dt){
   for(const s of P.solids){if(hit(P.x,P.y,s)){if(P.vy>0){P.y=s.y-PH;P.ground=true}else if(P.vy<0){P.y=s.y+s.h}P.vy=0}}
   if(P.y>P.maxY)respawn();
 }
+function bodyStep(b,dt){
+  b.vy=Math.min(b.vy+GRAV*dt,900);
+  const vx=b.d*SPEED;
+  b.x+=vx*dt;
+  if(vx!==0)for(const s of P.solids){if(hit(b.x,b.y,s)){if(vx>0)b.x=s.x-PW;else b.x=s.x+s.w}}
+  b.y+=b.vy*dt;
+  for(const s of P.solids){if(hit(b.x,b.y,s)){if(b.vy>0)b.y=s.y-PH;else if(b.vy<0)b.y=s.y+s.h;b.vy=0}}
+}
 function ploop(now){
   if(!P.on)return;
   P.raf=requestAnimationFrame(ploop);
+  const fc=gq().fps;if(fc&&now-P.last<1000/fc-2)return;
   let dt=(now-P.last)/1000;P.last=now;if(dt>.1)dt=.1;if(dt<0)dt=0;
   if(!P.pause){let r=dt;while(r>1e-6){const h=Math.min(r,1/120);pStep(h);r-=h}}
   pDraw(dt,now);
 }
 function drawTag(g,Z,x,y,name,hammer){
   g.font="bold "+(13/Z)+"px Trebuchet MS,Segoe UI,Arial,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";
-  const tw=g.measureText(name).width,hs=hammer&&hamC?17/Z:0,gap=hs?4/Z:0,sx=x-(tw+hs+gap)/2;
+  const tw=g.measureText(name).width,hs=hammer&&hamC?26/Z:0,gap=hs?4/Z:0,sx=x-(tw+hs+gap)/2;
   g.lineJoin="round";g.lineWidth=3.5/Z;g.strokeStyle="rgba(0,0,0,.85)";g.strokeText(name,sx,y);
   g.fillStyle="#fff";g.fillText(name,sx,y);
   if(hs)g.drawImage(hamC,sx+tw+gap,y-hs+3/Z,hs,hs);
 }
 function pDraw(dt,now){
-  const cv=$("#pc"),g=cv.getContext("2d"),dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;
+  const Q=gq(),cv=$("#pc"),g=cv.getContext("2d"),dpr=qdpr(),W=innerWidth,H=innerHeight;
+  const ir=Q.smooth?"auto":"pixelated";if(cv.style.imageRendering!==ir)cv.style.imageRendering=ir;
   const cw=Math.round(W*dpr),ch=Math.round(H*dpr);
   if(cv.width!==cw||cv.height!==ch){cv.width=cw;cv.height=ch}
   const Z=Math.max(.5,Math.min(1.8,H/440));
@@ -2266,14 +2315,15 @@ function pDraw(dt,now){
     if((n.x+n.w)*T<cx||n.x*T>x1||(n.y+n.h)*T<cy||n.y*T>y1)continue;
     drawPart(g,n,false);
   }
-  g.imageSmoothingEnabled=true;
+  g.imageSmoothingEnabled=Q.smooth;
   P.hits.length=0;
-  const tags=[],showNames=st.names!==false,fk=1-Math.exp(-dt*14);
+  const tags=[],showNames=st.names!==false,fk=1-Math.exp(-dt*18);
   for(const [id,p] of NET.pl){
     if(now-p.at>9000){NET.pl.delete(id);continue}
-    const ex=Math.min(.3,(now-p.at)/1000),ttx=p.x+p.vx*ex,tty=p.y+p.vy*ex;
-    p.rx+=(ttx-p.rx)*fk;p.ry+=(tty-p.ry)*fk;
-    if(Math.abs(ttx-p.rx)>400||Math.abs(tty-p.ry)>400){p.rx=ttx;p.ry=tty}
+    if(now-p.at>1500)p.d=0;
+    {let r=dt;while(r>1e-6){const h=Math.min(r,1/120);bodyStep(p,h);r-=h}}
+    p.rx+=(p.x-p.rx)*fk;p.ry+=(p.y-p.ry)*fk;
+    if(Math.abs(p.x-p.rx)>300||Math.abs(p.y-p.ry)>300){p.rx=p.x;p.ry=p.y}
     if(p.rx+80<cx||p.rx-80>x1||p.ry+120<cy||p.ry-120>y1)continue;
     const spr=svgSprite("r|"+p.c+"|"+p.fc,()=>window.beanSVG(p.fc,p.c));
     if(spr)g.drawImage(spr,p.rx-12.8,p.ry-5,52,56);else{g.fillStyle=p.c;g.fillRect(p.rx,p.ry,PW,PH)}
@@ -2288,14 +2338,14 @@ function pDraw(dt,now){
   }
 }
 $("#pc").addEventListener("pointerdown",e=>{
-  if(!P.on||P.pause||!P.hits.length)return;
+  if(!P.on||P.pause||P.kind||!P.hits.length)return;
   const r=e.currentTarget.getBoundingClientRect(),wx=P.view.cx+(e.clientX-r.left)/P.view.Z,wy=P.view.cy+(e.clientY-r.top)/P.view.Z;
   for(let i=P.hits.length-1;i>=0;i--){const h=P.hits[i];if(wx>=h.x0&&wx<=h.x1&&wy>=h.y0&&wy<=h.y1){playerClick(h.id,h.n);return}}
 });
 function playerClick(uid,name){
   if(fr.includes(uid))return;
-  P.pause=true;P.kind="friend";P.keys.l=P.keys.r=P.keys.j=0;
-  const back=()=>{if(P.kind==="friend"){P.kind="";P.pause=false}};
+  P.kind="friend";P.keys.l=P.keys.r=P.keys.j=0;
+  const back=()=>{if(P.kind==="friend")P.kind=""};
   const res=ok=>toast(ok?"Done":($("#fnote").textContent||"Something went wrong"));
   if(out.includes(uid)){dlg({title:name,sub:"Friend request already sent",btns:[{t:"OK",alt:1,fn:back}]});return}
   if(inc.includes(uid)){dlg({title:name,sub:"This player sent you a friend request",btns:[{t:"Accept",fn:async()=>{back();const ok=await accept(uid);if(ok)toast("You are now friends");else res(false)}},{t:"Cancel",alt:1,fn:back}]});return}
@@ -2304,23 +2354,24 @@ function playerClick(uid,name){
 const KEYMAP={a:"l",arrowleft:"l",d:"r",arrowright:"r",w:"j",arrowup:"j"," ":"j"};
 function leavePlay(){
   P.on=false;P.pause=false;P.kind="";cancelAnimationFrame(P.raf);P.keys.l=P.keys.r=P.keys.j=0;
-  netStop();SPR.delete(P.myKey);P.sprite=null;
+  netStop();SPR.delete(P.myKey);P.sprite=null;hideLoad(null,true);
   $("#play").classList.add("hide");closeDlg();
 }
-function resume(){P.kind="";P.pause=false}
+function resume(){P.kind=""}
 function confirmLeave(){
-  P.pause=true;P.kind="leave";
+  P.kind="leave";P.keys.l=P.keys.r=P.keys.j=0;
   dlg({title:"Are you sure you want to leave this game?",btns:[{t:"Yes",fn:leavePlay},{t:"No",alt:1,fn:resume}]});
 }
 function openMenu(){
   if(!P.on||P.kind==="kick")return;
   if(P.kind){closeDlg();resume();return}
-  P.pause=true;P.kind="menu";P.keys.l=P.keys.r=P.keys.j=0;
+  P.kind="menu";P.keys.l=P.keys.r=P.keys.j=0;
   dlg({title:"Menu",btns:[{t:"Resume",fn:resume},{t:"Reset",alt:1,fn:()=>{respawn();resume()}},{t:"Leave",alt:1,fn:confirmLeave}]});
 }
 addEventListener("keydown",e=>{
   if(!P.on)return;
   if(e.key==="Escape"){e.preventDefault();openMenu();return}
+  if(P.kind)return;
   const k=KEYMAP[String(e.key).toLowerCase()];if(k){e.preventDefault();P.keys[k]=1}
 });
 addEventListener("keyup",e=>{if(!P.on)return;const k=KEYMAP[String(e.key).toLowerCase()];if(k)P.keys[k]=0});
@@ -2328,7 +2379,7 @@ addEventListener("blur",()=>{P.keys.l=P.keys.r=P.keys.j=0});
 $("#pMenu").addEventListener("click",()=>{click();openMenu()});
 $("#ptouch").querySelectorAll("button").forEach(b=>{
   const k=b.dataset.k;
-  b.addEventListener("pointerdown",e=>{e.preventDefault();P.keys[k]=1});
+  b.addEventListener("pointerdown",e=>{e.preventDefault();if(!P.kind)P.keys[k]=1});
   ["pointerup","pointercancel","pointerleave"].forEach(t=>b.addEventListener(t,()=>{P.keys[k]=0}));
   b.addEventListener("contextmenu",e=>e.preventDefault());
 });
