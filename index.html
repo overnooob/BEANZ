@@ -535,10 +535,10 @@ function startFriends(user){
   ];
 }
 function stopFriends(){
-  subs.forEach(u=>u());subs=[];me=null;inc=[];out=[];fr=[];fol=[];fers=0;counts();cache={};Object.keys(sc).forEach(k=>delete sc[k]);rec=[];sres=[];sq="";
+  subs.forEach(u=>u());subs=[];me=null;inc=[];out=[];fr=[];fol=[];fers=0;counts();cache={};Object.keys(sc).forEach(k=>delete sc[k]);Object.keys(gen).forEach(k=>delete gen[k]);rec=[];sres=[];sq="";
   $("#fq").value="";$("#ftabs").style.display="";$("#flist").textContent="";$("#rcount").textContent="";
 }
-async function act(fn){try{await fn();click()}catch(e){fnote(e.lim||(e.code==="permission-denied"?"Not allowed":"Something went wrong"))}}
+async function act(fn,uid){try{await fn();click();if(uid)refreshStats(uid)}catch(e){fnote(e.lim||(e.code==="permission-denied"?"Not allowed":"Something went wrong"))}}
 const MAX=100;
 const lim=m=>{const e=new Error(m);e.lim=m;return e};
 async function cnt(q){try{return (await getCountFromServer(q)).data().count}catch(e){return 0}}
@@ -551,9 +551,9 @@ const add=uid=>act(async()=>{
 });
 const cancel=uid=>act(()=>deleteDoc(doc(db,"requests",me+"_"+uid)));
 const decline=uid=>act(()=>deleteDoc(doc(db,"requests",uid+"_"+me)));
-const follow=uid=>act(()=>{delete sc[uid];return setDoc(doc(db,"follows",me+"_"+uid),{follower:me,followed:uid,createdAt:serverTimestamp()})});
-const unfollow=uid=>act(()=>{delete sc[uid];return deleteDoc(doc(db,"follows",me+"_"+uid))});
-const unfriend=uid=>act(()=>deleteDoc(doc(db,"friendships",pid(me,uid))));
+const follow=uid=>act(()=>setDoc(doc(db,"follows",me+"_"+uid),{follower:me,followed:uid,createdAt:serverTimestamp()}),uid);
+const unfollow=uid=>act(()=>deleteDoc(doc(db,"follows",me+"_"+uid)),uid);
+const unfriend=uid=>act(()=>deleteDoc(doc(db,"friendships",pid(me,uid))),uid);
 const accept=uid=>act(async()=>{
   if(fr.length>=MAX)throw lim("You have reached the limit of 100 friends");
   if(await friendsOf(uid)>=MAX)throw lim("This player has reached the limit of 100 friends");
@@ -562,14 +562,17 @@ const accept=uid=>act(async()=>{
   b.delete(doc(db,"requests",uid+"_"+me));
   if(out.includes(uid))b.delete(doc(db,"requests",me+"_"+uid));
   await b.commit();
-});
-const sc={};
-async function stats(uid){
+},uid);
+const sc={},gen={};
+function refreshStats(uid){gen[uid]=(gen[uid]||0)+1;delete sc[uid];show()}
+async function stats(uid,retry){
   const c=sc[uid];if(c&&Date.now()-c.t<6e4)return c.d;
+  const g0=gen[uid]||0;
   const col=n=>collection(db,n);
-  const g=async q=>{try{return (await getCountFromServer(q)).data().count}catch(e){return null}};
+  const g=async q=>{try{return (await getCountFromServer(q)).data().count}catch(e){console.error("Stats:",e.code,e.message);return null}};
   const d=await Promise.all([g(query(col("friendships"),where("users","array-contains",uid))),g(query(col("follows"),where("followed","==",uid))),g(query(col("follows"),where("follower","==",uid)))]);
-  sc[uid]={d,t:Date.now()};return d;
+  if(d.includes(null)){if(!retry){await new Promise(r=>setTimeout(r,1200));return stats(uid,1)}return d}
+  if((gen[uid]||0)===g0)sc[uid]={d,t:Date.now()};return d;
 }
 function mk(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 function card(uid,p){
