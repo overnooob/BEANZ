@@ -89,6 +89,20 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 .err{color:#ff6b5e;font-size:14px;font-weight:700;text-align:center}
 .err:empty{display:none}
 .out{background:var(--k3);color:var(--y);border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+.sec{font-size:19px;margin:28px 0 10px;max-width:560px;padding-bottom:6px;border-bottom:2px solid var(--k3)}
+#settings h2+.sec{margin-top:4px}
+.box{background:var(--k2);border:2px solid var(--k3);border-radius:12px;padding:14px 16px;margin-bottom:10px;max-width:560px;display:flex;flex-direction:column;gap:10px}
+.inp{height:46px;background:var(--k3);border:2px solid transparent;border-radius:10px;color:var(--y);padding:0 14px;font:inherit;font-size:16px;width:100%}
+.inp:focus{border-color:var(--y);outline:0}
+.inp:disabled{opacity:.5}
+.inp::placeholder{color:#8a7a2a}
+.box .go{height:46px;font-size:16px}
+.go.alt{background:var(--k3);color:var(--y)}
+.note{font-size:14px;font-weight:700}
+.note:empty{display:none}
+.note.bad{color:#ff6b5e}
+.pname{font-size:22px;font-weight:900;word-break:break-all}
+.puser{font-size:14px;opacity:.7;word-break:break-all}
 </style>
 </head>
 <body>
@@ -112,7 +126,7 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
     <button data-p="games" class="on"><svg viewBox="0 0 24 24"><path d="M6 8h12a4 4 0 0 1 3.9 4.9l-.8 3.6A2.5 2.5 0 0 1 16.4 17l-1-1.5h-6.8l-1 1.5a2.5 2.5 0 0 1-4.7-.5l-.8-3.6A4 4 0 0 1 6 8Zm1 2v1.5H5.5v1.8H7v1.5h1.8v-1.5h1.5v-1.8H8.800V10H7Zm9 1.2a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.200Zm2.500 1.800a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.200Z"/></svg>Games</button>
     <button data-p="avatar"><svg viewBox="0 0 24 24"><path d="M12 12a4.500 4.500 0 1 0 0-9 4.500 4.500 0 0 0 0 9Zm0 2c-4.400 0-8 2.200-8 5v2h16v-2c0-2.800-3.600-5-8-5Z"/></svg>Avatar</button>
     <button data-p="friends"><svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 .5a3.200 3.200 0 1 0 0-6.400 3.200 3.200 0 0 0 0 6.400ZM9 14c-3.500 0-7 1.700-7 4v2h14v-2c0-2.300-3.500-4-7-4Zm7.500.2c2.900.2 5.500 1.600 5.500 3.800v2h-4v-2c0-1.400-.6-2.700-1.500-3.800Z"/></svg>Friends</button>
-    <button data-p="settings"><svg viewBox="0 0 24 24"><path d="M19.400 13a7.600 7.600 0 0 0 0-2l2.100-1.600-2-3.500-2.500 1a7.500 7.500 0 0 0-1.700-1L15 3.200h-4l-.4 2.700a7.500 7.500 0 0 0-1.700 1l-2.500-1-2 3.500L6.600 11a7.600 7.600 0 0 0 0 2l-2.100 1.600 2 3.500 2.500-1c.5.400 1.100.7 1.700 1l.4 2.700h4l.4-2.700c.6-.3 1.200-.6 1.700-1l2.500 1 2-3.500L19.400 13ZM12 15.500a3.500 3.500 0 1 1 0-7 3.500 3.500 0 0 1 0 7Z"/></svg>Settings</button>
+    <button data-p="settings"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.74 4.12 L10.34 1.53 L13.66 1.53 L14.26 4.12 A8.20 8.20 0 0 1 15.98 4.83 L18.23 3.42 L20.58 5.77 L19.17 8.02 A8.20 8.20 0 0 1 19.88 9.74 L22.47 10.34 L22.47 13.66 L19.88 14.26 A8.20 8.20 0 0 1 19.17 15.98 L20.58 18.23 L18.23 20.58 L15.98 19.17 A8.20 8.20 0 0 1 14.26 19.88 L13.66 22.47 L10.34 22.47 L9.74 19.88 A8.20 8.20 0 0 1 8.02 19.17 L5.77 20.58 L3.42 18.23 L4.83 15.98 A8.20 8.20 0 0 1 4.12 14.26 L1.53 13.66 L1.53 10.34 L4.12 9.74 A8.20 8.20 0 0 1 4.83 8.02 L3.42 5.77 L5.77 3.42 L8.02 4.83 A8.20 8.20 0 0 1 9.74 4.12 Z M8.20 12.00 a3.80 3.80 0 1 0 7.60 0 a3.80 3.80 0 1 0 -7.60 0Z"/></svg>Settings</button>
     <button data-p="create"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>Create</button>
   </aside>
   <main>
@@ -130,14 +144,38 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
     <section class="page" id="friends"></section>
     <section class="page" id="settings">
       <h2>Settings</h2>
+      <h3 class="sec">Audio</h3>
       <div class="row"><span>Music</span><label class="sw"><input type="checkbox" data-k="music" checked><span></span></label></div>
       <div class="row"><span>Music volume</span><input type="range" min="0" max="100" value="50" data-k="musicVol"></div>
       <div class="row"><span>Sound effects</span><label class="sw"><input type="checkbox" data-k="sfx" checked><span></span></label></div>
       <div class="row"><span>Effects volume</span><input type="range" min="0" max="100" value="70" data-k="sfxVol"></div>
+      <h3 class="sec">Graphics</h3>
       <div class="row"><span>Graphics quality</span><select data-k="quality"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
       <div class="row"><span>Show FPS</span><label class="sw"><input type="checkbox" data-k="fps"><span></span></label></div>
+      <h3 class="sec">Privacy</h3>
       <div class="row"><span>Friend requests</span><label class="sw"><input type="checkbox" data-k="req" checked><span></span></label></div>
-      <div class="row"><span id="who"></span><button class="out" id="logout">Log out</button></div>
+      <h3 class="sec">Account</h3>
+      <div class="box"><div class="pname" id="who"></div><div class="puser" id="whoUser"></div></div>
+      <div class="box">
+        <span>Display name</span>
+        <input class="inp" id="dn" type="text" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false">
+        <button class="go" id="dnSave">Save</button>
+        <div class="note" id="dnNote"></div>
+      </div>
+      <h3 class="sec">Password</h3>
+      <div class="box">
+        <input class="inp" id="pwOld" type="password" placeholder="Current password" maxlength="30" autocomplete="current-password">
+        <input class="inp" id="pwNew" type="password" placeholder="New password (5-30 characters)" maxlength="30" autocomplete="new-password">
+        <input class="inp" id="pwNew2" type="password" placeholder="Repeat new password" maxlength="30" autocomplete="new-password">
+        <button class="go" id="pwBtn">Change password</button>
+        <div class="note" id="pwNote"></div>
+      </div>
+      <h3 class="sec">Sessions</h3>
+      <div class="box">
+        <button class="go" id="logoutAll">Log out all other devices</button>
+        <div class="note" id="loNote"></div>
+      </div>
+      <div class="box"><button class="go alt" id="logout">Log out</button></div>
     </section>
     <section class="page" id="create"></section>
   </main>
@@ -288,8 +326,8 @@ apply('fps');
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
 const app=initializeApp({
   apiKey:"AIzaSyDU9wR0CxRuw5QynQFjTAF1kRHTg0sbsnI",
@@ -305,8 +343,17 @@ const $=s=>document.querySelector(s);
 const click=()=>{try{window.sfx&&window.sfx('click')}catch(e){}};
 const toEmail=n=>n.toLowerCase()+"@beanz.game";
 const toPass=p=>p+"#beanz";
-let mode="login";
+const DAY=864e5;
+const NAME=/^[A-Za-z0-9_]{3,20}$/;
+let mode="login",pending=false,fresh=false,unsub=null,userRef=null,saveTimer;
 
+const mainName=u=>u.displayName||(u.email||"").split("@")[0];
+const epKey=()=>"beanzEpoch_"+auth.currentUser.uid;
+const getEp=()=>{try{return localStorage.getItem(epKey())}catch(e){return null}};
+const setEp=v=>{try{localStorage.setItem(epKey(),String(v))}catch(e){}};
+function say(el,t,bad){el.textContent=t||"";el.classList.toggle("bad",!!bad)}
+
+/* Login / Register */
 function setMode(m){
   mode=m;
   document.querySelectorAll("#atabs button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));
@@ -337,56 +384,154 @@ async function submit(){
   const name=$("#u").value.trim(),pass=$("#p").value,err=$("#err"),go=$("#go");
   err.textContent="";
   if(mode==="register"){
-    if(!/^[A-Za-z0-9_]{3,20}$/.test(name)){err.textContent="Username: 3-20 letters, numbers or _";return}
+    if(!NAME.test(name)){err.textContent="Username: 3-20 letters, numbers or _";return}
     if(pass.length<5||pass.length>30){err.textContent="Password: 5-30 characters";return}
   }else if(!name||!pass){err.textContent="Enter username and password";return}
   go.disabled=true;
   try{
     if(mode==="register"){
-      const c=await createUserWithEmailAndPassword(auth,toEmail(name),toPass(pass));
-      await updateProfile(c.user,{displayName:name});
-      $("#who").textContent=name;
+      pending=true;fresh=true;
+      try{
+        const c=await createUserWithEmailAndPassword(auth,toEmail(name),toPass(pass));
+        await updateProfile(c.user,{displayName:name});
+      }finally{pending=false}
+      loadData(auth.currentUser);
     }else{
+      fresh=true;
       await signInWithEmailAndPassword(auth,/^[A-Za-z0-9_]{1,20}$/.test(name)?toEmail(name):"x@beanz.game",toPass(pass));
     }
     click();
-  }catch(e){err.textContent=msg(e)}
+  }catch(e){fresh=false;err.textContent=msg(e)}
   go.disabled=false;
 }
 $("#go").addEventListener("click",submit);
 ["#u","#p"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")submit()}));
 
-let timer;
+/* Profile */
+function renderProfile(d){
+  const dn=d.displayName||d.username||"";
+  $("#who").textContent=dn;
+  $("#whoUser").textContent=d.username||"";
+  const ts=d.displayNameChangedAt;
+  const t=ts&&ts.toMillis?ts.toMillis():0;
+  const left=t+7*DAY-Date.now();
+  const locked=left>0;
+  const inp=$("#dn");
+  if(document.activeElement!==inp)inp.value=dn;
+  inp.disabled=locked;$("#dnSave").disabled=locked;
+  if(locked)say($("#dnNote"),"You can change it again in "+Math.ceil(left/DAY)+(Math.ceil(left/DAY)===1?" day":" days"));
+  else if(!$("#dnNote").classList.contains("keep"))say($("#dnNote"),"You can change it once every 7 days");
+}
+
+$("#dnSave").addEventListener("click",async()=>{
+  const note=$("#dnNote"),v=$("#dn").value.trim();
+  if(!userRef)return;
+  if(!NAME.test(v)){say(note,"Display name: 3-20 letters, numbers or _",true);return}
+  if(v===$("#who").textContent){say(note,"This is already your display name",true);return}
+  $("#dnSave").disabled=true;
+  try{
+    await updateDoc(userRef,{displayName:v,displayNameChangedAt:serverTimestamp()});
+    click();say(note,"Saved");
+  }catch(e){
+    say(note,e.code==="permission-denied"?"You can change it once every 7 days":"Something went wrong",true);
+    $("#dnSave").disabled=false;
+  }
+});
+
+/* Password */
+$("#pwBtn").addEventListener("click",async()=>{
+  const note=$("#pwNote"),o=$("#pwOld").value,n1=$("#pwNew").value,n2=$("#pwNew2").value,u=auth.currentUser;
+  if(!u)return;
+  if(!o||!n1||!n2){say(note,"Fill in all fields",true);return}
+  if(n1.length<5||n1.length>30){say(note,"New password: 5-30 characters",true);return}
+  if(n1!==n2){say(note,"New passwords do not match",true);return}
+  if(n1===o){say(note,"New password must be different",true);return}
+  $("#pwBtn").disabled=true;
+  try{
+    await reauthenticateWithCredential(u,EmailAuthProvider.credential(u.email,toPass(o)));
+    await updatePassword(u,toPass(n1));
+    ["#pwOld","#pwNew","#pwNew2"].forEach(i=>$(i).value="");
+    await revokeOthers();
+    click();say(note,"Password changed");
+  }catch(e){
+    say(note,["auth/invalid-credential","auth/wrong-password"].includes(e.code)?"Wrong current password":msg(e),true);
+  }
+  $("#pwBtn").disabled=false;
+});
+
+/* Log out other devices */
+async function revokeOthers(){
+  if(!userRef)throw new Error("Not ready");
+  const ep=Date.now();
+  const prev=getEp();
+  setEp(ep);
+  try{await updateDoc(userRef,{sessionEpoch:ep})}
+  catch(e){if(prev!==null)setEp(prev);throw e}
+}
+$("#logoutAll").addEventListener("click",async()=>{
+  const note=$("#loNote");
+  $("#logoutAll").disabled=true;
+  try{await revokeOthers();click();say(note,"Logged out on all other devices")}
+  catch(e){say(note,"Something went wrong",true)}
+  $("#logoutAll").disabled=false;
+});
+
+/* Load / save account data */
 async function loadData(user){
   const ref=doc(db,"users",user.uid);
+  userRef=ref;
+  const uname=mainName(user);
   try{
     const snap=await getDoc(ref);
     let d;
-    if(snap.exists()){d=snap.data()}
-    else{
-      d={username:user.displayName||"",bux:0,avatar:{color:"#FFD60A",face:"smile"},settings:{music:true,musicVol:50,sfx:true,sfxVol:70,quality:"Medium",fps:false,req:true}};
+    if(snap.exists()){
+      d=snap.data();
+      const fix={};
+      if(!d.username)fix.username=uname;
+      if(!d.displayName)fix.displayName=d.username||uname;
+      if(Object.keys(fix).length){await updateDoc(ref,fix);Object.assign(d,fix)}
+    }else{
+      d={username:uname,displayName:uname,bux:0,avatar:{color:"#FFD60A",face:"smile"},settings:{music:true,musicVol:50,sfx:true,sfxVol:70,quality:"Medium",fps:false,req:true},sessionEpoch:0};
       await setDoc(ref,d);
     }
+    const ep=d.sessionEpoch||0,stored=getEp();
+    if(fresh||stored===null)setEp(ep);
+    else if(+stored!==ep){fresh=false;signOut(auth);return}
+    fresh=false;
     window.BEANZ.set(d);
+    renderProfile(d);
     window.BEANZ.save=()=>{
-      clearTimeout(timer);
-      timer=setTimeout(()=>{
+      clearTimeout(saveTimer);
+      saveTimer=setTimeout(()=>{
         const x=window.BEANZ.get();
-        setDoc(ref,{username:user.displayName||d.username||"",bux:x.bux,avatar:x.avatar,settings:x.settings}).catch(e=>console.error(e));
+        setDoc(ref,{bux:x.bux,avatar:x.avatar,settings:x.settings},{merge:true}).catch(e=>console.error(e));
       },400);
     };
+    if(unsub)unsub();
+    unsub=onSnapshot(ref,s=>{
+      const x=s.data({serverTimestamps:"estimate"});
+      if(!x)return;
+      const st=getEp();
+      if(st!==null&&+st!==(x.sessionEpoch||0)){signOut(auth);return}
+      renderProfile(x);
+    });
   }catch(e){console.error("Firestore:",e)}
 }
+
 onAuthStateChanged(auth,user=>{
   const a=$("#auth");
   a.classList.remove("load");
   window.BEANZ.save=null;
+  if(unsub){unsub();unsub=null}
   if(user){
-    $("#who").textContent=user.displayName||"";
+    $("#who").textContent=mainName(user);
+    $("#whoUser").textContent=mainName(user);
     a.classList.add("hide");
-    loadData(user);
+    if(!pending)loadData(user);
   }else{
-    $("#u").value="";$("#p").value="";
+    userRef=null;
+    ["#u","#p","#pwOld","#pwNew","#pwNew2","#dn"].forEach(i=>$(i).value="");
+    ["#dnNote","#pwNote","#loNote"].forEach(i=>say($(i),""));
     a.classList.remove("hide");
   }
 });
