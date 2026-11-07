@@ -98,14 +98,22 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 .inp::placeholder{color:#8a7a2a}
 .box .go{height:46px;font-size:16px}
 .go.alt{background:var(--k3);color:var(--y)}
-.note{font-size:14px;font-weight:700}
+.note{font-size:14px;font-weight:700;margin-top:6px}
+.panel.col .note{margin-top:4px}
+#mlnote,#mineNote{margin-top:14px}
+.av.top{align-items:start}
+.panel.fit{min-height:0}
+.panel.col{gap:12px}
+.pc.wr{flex-wrap:wrap}
+.pc .note{flex:0 0 100%;margin-top:2px}
+#cgames{padding:8px 2px 4px}
 .note:empty{display:none}
 .note.bad{color:#ff6b5e}
 .pname{font-size:22px;font-weight:900;word-break:break-all}
 .puser{font-size:14px;opacity:.7;word-break:break-all}
 .fq{max-width:560px;margin-bottom:12px}
 #friends .sec{margin-top:18px}
-.pc{display:flex;align-items:center;gap:12px;background:var(--k2);border:2px solid var(--k3);border-radius:12px;padding:10px 12px;margin-bottom:8px;max-width:560px}
+.pc{display:flex;align-items:center;gap:12px;background:var(--k2);border:2px solid var(--k3);border-radius:12px;padding:10px 12px;margin-bottom:10px;max-width:560px}
 .pav{width:52px;height:56px;flex:none;background:var(--k3);border-radius:10px;display:grid;place-items:center;overflow:hidden}
 .pav svg{width:44px;height:48px}
 .pn{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -123,10 +131,11 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 @media(max-width:700px){.pc{flex-wrap:wrap}.pa{width:100%}}
 
 .bell{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--k3);color:var(--y);display:grid;place-items:center;cursor:pointer;padding:0;flex:none}
-.bell svg{width:24px;height:24px;fill:currentColor}
+.bell svg{width:24px;height:24px;fill:currentColor;display:block}
 .bell:hover,.bux:hover{background:var(--k4)}
 .bux{cursor:pointer}
-#ncount:not(:empty){position:absolute;top:-4px;right:-4px;background:#ff453a;color:#fff;border-radius:10px;padding:0 6px;font-size:12px;font-weight:900;line-height:18px}
+#ncount{position:absolute;top:-4px;right:-4px}
+#ncount:not(:empty){background:#ff453a;color:#fff;border-radius:10px;padding:0 6px;font-size:12px;font-weight:900;line-height:18px}
 aside button[data-p=admin]{display:none}
 .stage.ns{cursor:default}
 .col{display:flex;flex-direction:column;gap:10px}
@@ -136,7 +145,11 @@ aside button[data-p=admin]{display:none}
 .mc b,.mc small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mc small{opacity:.7;font-weight:600}
 .pr{display:inline-flex;gap:6px;align-items:center;font-weight:900}
-.pr i{width:18px;height:18px;border-radius:50%;background:var(--y);color:var(--k);font-style:normal;font-size:11px;display:grid;place-items:center}
+.pr i{width:18px;height:18px;border-radius:50%;background:var(--y);color:var(--k);font-style:normal;font-size:11px;display:grid;place-items:center;flex:none}
+.mc .pr{gap:5px}
+.mc .pr i{width:15px;height:15px;font-size:9px}
+#mprice .pr{gap:9px}
+#mprice .pr i{width:26px;height:26px;font-size:15px}
 .cvw{position:relative;width:100%;max-width:416px;aspect-ratio:52/56}
 .cvw svg,.cvw canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none}
 .cvw canvas{touch-action:none;cursor:crosshair}
@@ -181,8 +194,8 @@ aside button[data-p=admin]{display:none}
     <button data-p="friends"><svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 .5a3.200 3.200 0 1 0 0-6.400 3.200 3.200 0 0 0 0 6.400ZM9 14c-3.500 0-7 1.700-7 4v2h14v-2c0-2.300-3.500-4-7-4Zm7.500.2c2.900.2 5.500 1.600 5.500 3.800v2h-4v-2c0-1.400-.6-2.700-1.500-3.800Z"/></svg>Friends</button>
     <button data-p="market"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7 7V6a5 5 0 0 1 10 0v1h3l1 14H3L4 7h3Zm2 0h6V6a3 3 0 0 0-6 0v1Z"/></svg>Marketplace</button>
     <button data-p="settings"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.74 4.12 L10.34 1.53 L13.66 1.53 L14.26 4.12 A8.20 8.20 0 0 1 15.98 4.83 L18.23 3.42 L20.58 5.77 L19.17 8.02 A8.20 8.20 0 0 1 19.88 9.74 L22.47 10.34 L22.47 13.66 L19.88 14.26 A8.20 8.20 0 0 1 19.17 15.98 L20.58 18.23 L18.23 20.58 L15.98 19.17 A8.20 8.20 0 0 1 14.26 19.88 L13.66 22.47 L10.34 22.47 L9.74 19.88 A8.20 8.20 0 0 1 8.02 19.17 L5.77 20.58 L3.42 18.23 L4.83 15.98 A8.20 8.20 0 0 1 4.12 14.26 L1.53 13.66 L1.53 10.34 L4.12 9.74 A8.20 8.20 0 0 1 4.83 8.02 L3.42 5.77 L5.77 3.42 L8.02 4.83 A8.20 8.20 0 0 1 9.74 4.12 Z M8.20 12.00 a3.80 3.80 0 1 0 7.60 0 a3.80 3.80 0 1 0 -7.60 0Z"/></svg>Settings</button>
-    <button data-p="admin"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.400 9.400 8 11 4.600-1.600 8-6 8-11V5l-8-3Z"/></svg>Admin</button>
     <button data-p="create"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>Create</button>
+    <button data-p="admin"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.400 9.400 8 11 4.600-1.600 8-6 8-11V5l-8-3Z"/></svg>Admin</button>
   </aside>
   <main>
     <section class="page on" id="games"></section>
@@ -241,24 +254,24 @@ aside button[data-p=admin]{display:none}
     </section>
     <section class="page" id="market">
       <h2>Marketplace</h2>
-      <div class="note bad" id="mnote"></div>
       <div id="mlistv">
         <input class="inp fq" id="mq" type="text" placeholder="Search items" maxlength="30" autocomplete="off" spellcheck="false">
-        <div class="tabs" id="mtabs"><button class="on" data-c="All">All</button><button data-c="Clothing">Clothing</button><button data-c="Accessories">Accessories</button><button data-c="Faces">Faces</button></div>
+        <div class="tabs" id="mtabs"><button class="on" data-c="All">All</button><button data-c="Clothing">Clothing</button><button data-c="Accessories">Accessories</button><button data-c="Faces">Body</button></div>
         <div class="grid mgrid" id="mlist"></div>
+        <div class="note bad" id="mlnote"></div>
       </div>
       <div id="mdet" style="display:none">
         <button class="out" id="mback">&lsaquo; Back</button>
-        <div class="av" style="margin-top:14px">
+        <div class="av top" style="margin-top:14px">
           <div class="stage ns"><svg id="mstage" viewBox="0 0 260 280"></svg></div>
-          <div class="panel col">
+          <div class="panel col fit">
             <div class="pname" id="mname"></div>
             <div class="puser" id="mby"></div>
             <div class="puser" id="mcat"></div>
             <div class="pname" id="mprice"></div>
             <button class="go" id="mbuy">Buy</button>
             <button class="go alt" id="mtry">Try On</button>
-            <button class="go alt" id="madm" style="display:none">Admin: delete item</button>
+            <div class="note" id="mnote"></div>
           </div>
         </div>
       </div>
@@ -312,22 +325,25 @@ aside button[data-p=admin]{display:none}
     <section class="page" id="create">
       <h2>Create</h2>
       <div class="tabs" id="ctabs"></div>
-      <div class="tabs sub" id="csubs"></div>
       <div class="empty" id="cgames" style="display:none">Game creation is coming soon</div>
-      <div class="av" id="ced">
-        <div class="stage ns"><div class="cvw"><svg id="guide" viewBox="0 0 260 280"></svg><canvas id="cv"></canvas></div></div>
-        <div class="panel col">
-          <div class="tabs" id="tools"><button class="on" data-t="pen">Pencil</button><button data-t="erase">Eraser</button><button data-t="fill">Fill</button><button data-t="clear">Clear</button></div>
-          <div class="pal" id="pal"></div>
-          <input class="inp" id="cName" type="text" placeholder="Item name" maxlength="30" autocomplete="off" spellcheck="false">
-          <input class="inp" id="cPrice" type="text" inputmode="numeric" placeholder="Price in Bux (0 = free)" maxlength="9" autocomplete="off">
-          <button class="go" id="cPub">Publish to Marketplace</button>
-          <div class="note" id="cNote"></div>
+      <div id="citems">
+        <div class="tabs" id="ccats"></div>
+        <div class="tabs sub" id="csubs"></div>
+        <div class="av" id="ced">
+          <div class="stage ns"><div class="cvw"><svg id="guide" viewBox="0 0 260 280"></svg><canvas id="cv"></canvas></div></div>
+          <div class="panel col">
+            <div class="tabs" id="tools"><button class="on" data-t="pen">Pencil</button><button data-t="erase">Eraser</button><button data-t="fill">Fill</button><button data-t="clear">Clear</button></div>
+            <div class="pal" id="pal"></div>
+            <input class="inp" id="cName" type="text" placeholder="Item name" maxlength="30" autocomplete="off" spellcheck="false">
+            <input class="inp" id="cPrice" type="text" inputmode="numeric" placeholder="Price in Bux (0 = free)" maxlength="9" autocomplete="off">
+            <button class="go" id="cPub">Publish to Marketplace</button>
+            <div class="note" id="cNote"></div>
+          </div>
         </div>
+        <h3 class="sec">Your items</h3>
+        <div id="mine"></div>
+        <div class="note" id="mineNote"></div>
       </div>
-      <h3 class="sec">Your items</h3>
-      <div class="note" id="mineNote"></div>
-      <div id="mine"></div>
     </section>
   </main>
 </div>
@@ -464,7 +480,7 @@ function render(){
   $('#subs').innerHTML=Object.keys(tree[cat]).map(t=>`<button class="${t===sub?'on':''}" data-s="${t}">${t}</button>`).join('');
   const list=tree[cat][sub];
   if(sub==='Color')$('#items').innerHTML=list.map(c=>`<button class="sw2 ${av.color===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('');
-  else if(sub==='Faces')$('#items').innerHTML=list.map(f=>`<button class="item ${av.face===f&&!av.eq.face?'on':''}" data-f="${f}"><svg viewBox="105 80 100 100">${(EYES+FACES[f]).split('#000').join('#FFD60A')}</svg>${f[0].toUpperCase()+f.slice(1)}</button>`).join('')+ownBtns('Faces');
+  else if(sub==='Faces')$('#items').innerHTML=list.map(f=>`<button class="item ${av.face===f&&!av.eq.face?'on':''}" data-f="${f}"><svg viewBox="0 0 260 280"><g transform="rotate(6 135 135)"><path d="${BEAN}" fill="rgba(255,214,10,.10)" stroke="#FFD60A" stroke-opacity=".35" stroke-width="3" stroke-dasharray="7 7"/>${EYES+FACES[f]}</g></svg>${f[0].toUpperCase()+f.slice(1)}</button>`).join('')+ownBtns('Faces');
   else $('#items').innerHTML=ownBtns(sub)||'<div class="empty" style="grid-column:1/-1">You do not own any items here. Get some in the Marketplace.</div>';
 }
 $('#tabs').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;cat=t;sub=Object.keys(tree[t])[0];render();sfx('click')});
@@ -508,17 +524,17 @@ Object.assign(window.BEANZ,{
 });
 
 /* Create: pixel editor */
-const CT={Games:[],Clothing:['Shirts','Pants','Jackets','Shoes'],Accessories:['Hats','Back','Front','Neck','Waist'],Faces:['Faces']};
-let ccat='Clothing',csub='Shirts';
+const CT={Body:['Faces'],Clothing:['Shirts','Pants','Jackets','Shoes'],Accessories:['Hats','Back','Front','Neck','Waist']};
+let ctop='Items',ccat='Clothing',csub='Shirts';
 function crender(){
-  $('#ctabs').innerHTML=Object.keys(CT).map(t=>`<button class="${t===ccat?'on':''}" data-t="${t}">${t}</button>`).join('');
-  const subs=CT[ccat];
-  $('#csubs').style.display=subs.length>1?'':'none';
-  $('#csubs').innerHTML=subs.map(t=>`<button class="${t===csub?'on':''}" data-s="${t}">${t}</button>`).join('');
-  $('#cgames').style.display=ccat==='Games'?'':'none';
-  $('#ced').style.display=ccat==='Games'?'none':'';
+  $('#ctabs').innerHTML=['Games','Items'].map(t=>`<button class="${t===ctop?'on':''}" data-t="${t}">${t}</button>`).join('');
+  $('#cgames').style.display=ctop==='Games'?'':'none';
+  $('#citems').style.display=ctop==='Items'?'':'none';
+  $('#ccats').innerHTML=Object.keys(CT).map(t=>`<button class="${t===ccat?'on':''}" data-t="${t}">${t}</button>`).join('');
+  $('#csubs').innerHTML=CT[ccat].map(t=>`<button class="${t===csub?'on':''}" data-s="${t}">${t}</button>`).join('');
 }
-$('#ctabs').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;ccat=t;csub=CT[t][0]||'';crender();sfx('click')});
+$('#ctabs').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;ctop=t;crender();sfx('click')});
+$('#ccats').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;ccat=t;csub=CT[t][0];crender();sfx('click')});
 $('#csubs').addEventListener('click',e=>{const t=e.target.dataset.s;if(!t)return;csub=t;crender();sfx('click')});
 crender();
 window.ED=(()=>{
@@ -558,7 +574,7 @@ window.ED=(()=>{
     $$('#pal button').forEach(x=>x.classList.toggle('on',x===b));sfx('click');
   });
   paint();
-  return{cat:()=>ccat,sub:()=>csub,art:()=>a.some(c=>c!=='.')?a.join(''):null,clear(){a.fill('.');paint()}};
+  return{cat:()=>ccat==='Body'?'Faces':ccat,sub:()=>csub,art:()=>a.some(c=>c!=='.')?a.join(''):null,clear(){a.fill('.');paint()}};
 })();
 
 /* FPS */
@@ -869,7 +885,7 @@ const isAdmin=()=>!!auth.currentUser&&auth.currentUser.email===ADMIN_EMAIL;
 const M={subs:[],owned:[],claiming:new Set(),notifs:[],newIds:new Set(),items:[],cat:"All",q:"",cur:null,tryOn:false,page:"games"};
 const tms=t=>t&&t.toMillis?t.toMillis():Date.now();
 const dts=t=>new Date(tms(t)).toLocaleString();
-const catLabel=(c,s)=>c==="Faces"?"Faces":c+" > "+s;
+const catLabel=(c,s)=>c==="Faces"?"Body > Faces":c+" > "+s;
 const uidNow=()=>auth.currentUser&&auth.currentUser.uid;
 const notify=(uid,text)=>setDoc(doc(collection(db,"notifs")),{to:uid,text,kind:"admin",read:false,createdAt:serverTimestamp()});
 function priceEl(p){const s=mk("span","pr");if(p===0){s.textContent="Free";return s}s.append(mk("i",null,"B"),document.createTextNode(fmtB(p)));return s}
@@ -951,7 +967,7 @@ function renderNotifs(){
 
 /* Marketplace */
 async function loadMarket(){
-  const note=$("#mnote");
+  const note=$("#mlnote");
   try{
     const s=await getDocs(query(collection(db,"items"),orderBy("createdAt","desc"),limit(200)));
     M.items=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));
@@ -971,7 +987,7 @@ function renderMarket(){
   if(!l.length){const e=mk("div","empty","No items found");e.style.gridColumn="1/-1";frag.append(e)}
   $("#mlist").replaceChildren(frag);
 }
-function showList(){M.cur=null;$("#mdet").style.display="none";$("#mlistv").style.display="";say($("#mnote"),"")}
+function showList(){M.cur=null;$("#mdet").style.display="none";$("#mlistv").style.display="";say($("#mnote"),"");say($("#mlnote"),"")}
 function openItem(it){M.cur=it;M.tryOn=false;say($("#mnote"),"");$("#mlistv").style.display="none";$("#mdet").style.display="";renderDetail()}
 function renderDetail(){
   const it=M.cur;if(!it)return;
@@ -983,7 +999,6 @@ function renderDetail(){
   $("#mprice").replaceChildren(priceEl(it.price));
   const b=$("#mbuy");b.textContent=own?"Owned":"Buy";b.disabled=own;
   $("#mtry").textContent=M.tryOn?"Show item":"Try On";
-  $("#madm").style.display=isAdmin()?"":"none";
 }
 $("#mq").addEventListener("input",()=>{M.q=$("#mq").value.trim();renderMarket()});
 $("#mtabs").addEventListener("click",e=>{
@@ -999,7 +1014,7 @@ $("#mbuy").addEventListener("click",async()=>{
   btn.disabled=true;
   try{
     const x=await getDoc(doc(db,"items",it.id));
-    if(!x.exists()){say(note,"This item no longer exists",true);showList();loadMarket();return}
+    if(!x.exists()){showList();loadMarket();say($("#mlnote"),"This item no longer exists",true);return}
     const f={id:x.id,...x.data()};
     if(f.price!==it.price){M.cur=f;renderDetail();say(note,"The price has changed. Check it and try again",true);return}
     if(window.BEANZ.get().bux<f.price){say(note,"Not enough Bux",true);return}
@@ -1015,7 +1030,6 @@ $("#mbuy").addEventListener("click",async()=>{
   }catch(e){console.error(e);say(note,"Something went wrong",true)}
   finally{renderDetail()}
 });
-$("#madm").addEventListener("click",()=>{if(M.cur)adminDeleteItem(M.cur,"",$("#mnote"))});
 
 /* Bux page */
 async function loadBux(){
@@ -1085,7 +1099,7 @@ async function loadMine(){
   }catch(e){console.error(e);say(note,"Could not load your items",true)}
 }
 function mineRow(it){
-  const el=mk("div","pc"),av=mk("div","pav"),nm=mk("div","pn"),ac=mk("div","pa"),note=$("#mineNote");
+  const el=mk("div","pc wr"),av=mk("div","pav"),nm=mk("div","pn"),ac=mk("div","pa"),note=mk("div","note"),gnote=$("#mineNote");
   av.innerHTML=svgOf(window.BEANZ.itemSVG(it.art));
   const n=mk("input","inp sm"),p=mk("input","inp sm");
   n.value=it.name;n.maxLength=30;p.value=String(it.price);p.inputMode="numeric";p.maxLength=9;
@@ -1101,10 +1115,10 @@ function mineRow(it){
   };
   dl.onclick=async()=>{
     if(!confirm("Delete this item? Everyone who owns it will lose it."))return;
-    try{await deleteDoc(doc(db,"items",it.id));click();M.owned=M.owned.filter(x=>x.id!==it.id);window.BEANZ.inv(M.owned);say(note,"Deleted");loadMine()}
-    catch(e){console.error(e);say(note,"Something went wrong",true)}
+    try{await deleteDoc(doc(db,"items",it.id));click();M.owned=M.owned.filter(x=>x.id!==it.id);window.BEANZ.inv(M.owned);loadMine().then(()=>say(gnote,"Deleted"))}
+    catch(e){console.error(e);say(gnote,"Something went wrong",true)}
   };
-  ac.append(sv,dl);el.append(av,nm,ac);return el;
+  ac.append(sv,dl);el.append(av,nm,ac,note);return el;
 }
 
 /* Admin */
