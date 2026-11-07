@@ -90,7 +90,7 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 .err:empty{display:none}
 .out{background:var(--k3);color:var(--y);border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
 .sec{font-size:19px;margin:28px 0 10px;max-width:560px;padding-bottom:6px;border-bottom:2px solid var(--k3)}
-#settings h2+.sec{margin-top:4px}
+#settings h2+.sec,#buxpage h2+.sec,#admin h2+.sec{margin-top:4px}
 .box{background:var(--k2);border:2px solid var(--k3);border-radius:12px;padding:14px 16px;margin-bottom:10px;max-width:560px;display:flex;flex-direction:column;gap:10px}
 .inp{height:46px;background:var(--k3);border:2px solid transparent;border-radius:10px;color:var(--y);padding:0 14px;font:inherit;font-size:16px;width:100%}
 .inp:focus{border-color:var(--y);outline:0}
@@ -121,9 +121,43 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 .pn .pstats{gap:12px;font-size:12px;font-weight:700;opacity:.7}
 .pa{flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:700px){.pc{flex-wrap:wrap}.pa{width:100%}}
+
+.bell{position:relative;width:46px;height:46px;border-radius:50%;border:0;background:var(--k3);color:var(--y);display:grid;place-items:center;cursor:pointer;padding:0;flex:none}
+.bell svg{width:24px;height:24px;fill:currentColor}
+.bell:hover,.bux:hover{background:var(--k4)}
+.bux{cursor:pointer}
+#ncount:not(:empty){position:absolute;top:-4px;right:-4px;background:#ff453a;color:#fff;border-radius:10px;padding:0 6px;font-size:12px;font-weight:900;line-height:18px}
+aside button[data-p=admin]{display:none}
+.stage.ns{cursor:default}
+.col{display:flex;flex-direction:column;gap:10px}
+.mgrid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));max-width:1000px}
+.mc{display:flex;flex-direction:column;align-items:center;gap:3px}
+.mc svg{width:110px;height:118px;margin:0 0 4px}
+.mc b,.mc small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc small{opacity:.7;font-weight:600}
+.pr{display:inline-flex;gap:6px;align-items:center;font-weight:900}
+.pr i{width:18px;height:18px;border-radius:50%;background:var(--y);color:var(--k);font-style:normal;font-size:11px;display:grid;place-items:center}
+.cvw{position:relative;width:100%;max-width:416px;aspect-ratio:52/56}
+.cvw svg,.cvw canvas{position:absolute;inset:0;width:100%;height:100%;max-width:none}
+.cvw canvas{touch-action:none;cursor:crosshair}
+.pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:8px;margin-bottom:14px}
+.inp.sm{height:38px;font-size:14px;padding:0 10px}
+.pn .inp{margin-top:6px}
+.pc.new{border-color:var(--y)}
+.nt{font-weight:700;word-break:break-word}
+#ban{z-index:101}
+@media(max-width:700px){.bell{width:38px;height:38px}.bell svg{width:20px;height:20px}.mc svg{width:90px;height:97px}}
 </style>
 </head>
 <body>
+<div class="auth hide" id="ban">
+  <div class="card">
+    <div class="logo">BEANZ</div>
+    <div class="pname" id="banMsg"></div>
+    <div class="puser" id="banReason"></div>
+    <button class="go alt" id="banOut">Log out</button>
+  </div>
+</div>
 <div class="auth load" id="auth">
   <div class="card">
     <div class="logo">BEANZ</div>
@@ -137,14 +171,17 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 <div class="top">
   <div class="logo">BEANZ</div>
   <div class="sp"></div>
-  <div class="bux"><i>B</i><span id="bux">0</span></div>
+  <button class="bell" id="bell" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M12 22a2.500 2.500 0 0 0 2.400-2h-4.800A2.500 2.500 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5-6.700V3.500a2 2 0 0 0-4 0v.8A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg><span id="ncount"></span></button>
+  <div class="bux" id="buxBtn" role="button" tabindex="0"><i>B</i><span id="bux">0</span></div>
 </div>
 <div class="wrap">
   <aside id="nav">
     <button data-p="games" class="on"><svg viewBox="0 0 24 24"><path d="M6 8h12a4 4 0 0 1 3.9 4.9l-.8 3.6A2.5 2.5 0 0 1 16.4 17l-1-1.5h-6.8l-1 1.5a2.5 2.5 0 0 1-4.7-.5l-.8-3.6A4 4 0 0 1 6 8Zm1 2v1.5H5.5v1.8H7v1.5h1.8v-1.5h1.5v-1.8H8.800V10H7Zm9 1.2a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.200Zm2.500 1.800a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.200Z"/></svg>Games</button>
     <button data-p="avatar"><svg viewBox="0 0 24 24"><path d="M12 12a4.500 4.500 0 1 0 0-9 4.500 4.500 0 0 0 0 9Zm0 2c-4.400 0-8 2.200-8 5v2h16v-2c0-2.800-3.600-5-8-5Z"/></svg>Avatar</button>
     <button data-p="friends"><svg viewBox="0 0 24 24"><path d="M9 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm7 .5a3.200 3.200 0 1 0 0-6.400 3.200 3.200 0 0 0 0 6.400ZM9 14c-3.500 0-7 1.700-7 4v2h14v-2c0-2.300-3.500-4-7-4Zm7.500.2c2.900.2 5.500 1.600 5.500 3.800v2h-4v-2c0-1.400-.6-2.700-1.500-3.800Z"/></svg>Friends</button>
+    <button data-p="market"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M7 7V6a5 5 0 0 1 10 0v1h3l1 14H3L4 7h3Zm2 0h6V6a3 3 0 0 0-6 0v1Z"/></svg>Marketplace</button>
     <button data-p="settings"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M9.74 4.12 L10.34 1.53 L13.66 1.53 L14.26 4.12 A8.20 8.20 0 0 1 15.98 4.83 L18.23 3.42 L20.58 5.77 L19.17 8.02 A8.20 8.20 0 0 1 19.88 9.74 L22.47 10.34 L22.47 13.66 L19.88 14.26 A8.20 8.20 0 0 1 19.17 15.98 L20.58 18.23 L18.23 20.58 L15.98 19.17 A8.20 8.20 0 0 1 14.26 19.88 L13.66 22.47 L10.34 22.47 L9.74 19.88 A8.20 8.20 0 0 1 8.02 19.17 L5.77 20.58 L3.42 18.23 L4.83 15.98 A8.20 8.20 0 0 1 4.12 14.26 L1.53 13.66 L1.53 10.34 L4.12 9.74 A8.20 8.20 0 0 1 4.83 8.02 L3.42 5.77 L5.77 3.42 L8.02 4.83 A8.20 8.20 0 0 1 9.74 4.12 Z M8.20 12.00 a3.80 3.80 0 1 0 7.60 0 a3.80 3.80 0 1 0 -7.60 0Z"/></svg>Settings</button>
+    <button data-p="admin"><svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.400 9.400 8 11 4.600-1.600 8-6 8-11V5l-8-3Z"/></svg>Admin</button>
     <button data-p="create"><svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6V5Z"/></svg>Create</button>
   </aside>
   <main>
@@ -202,14 +239,103 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
       </div>
       <div class="box"><button class="go alt" id="logout">Log out</button></div>
     </section>
-    <section class="page" id="create"></section>
+    <section class="page" id="market">
+      <h2>Marketplace</h2>
+      <div class="note bad" id="mnote"></div>
+      <div id="mlistv">
+        <input class="inp fq" id="mq" type="text" placeholder="Search items" maxlength="30" autocomplete="off" spellcheck="false">
+        <div class="tabs" id="mtabs"><button class="on" data-c="All">All</button><button data-c="Clothing">Clothing</button><button data-c="Accessories">Accessories</button><button data-c="Faces">Faces</button></div>
+        <div class="grid mgrid" id="mlist"></div>
+      </div>
+      <div id="mdet" style="display:none">
+        <button class="out" id="mback">&lsaquo; Back</button>
+        <div class="av" style="margin-top:14px">
+          <div class="stage ns"><svg id="mstage" viewBox="0 0 260 280"></svg></div>
+          <div class="panel col">
+            <div class="pname" id="mname"></div>
+            <div class="puser" id="mby"></div>
+            <div class="puser" id="mcat"></div>
+            <div class="pname" id="mprice"></div>
+            <button class="go" id="mbuy">Buy</button>
+            <button class="go alt" id="mtry">Try On</button>
+            <button class="go alt" id="madm" style="display:none">Admin: delete item</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="page" id="buxpage">
+      <h2>Bux</h2>
+      <h3 class="sec">Earnings</h3>
+      <div id="buxStats"></div>
+      <h3 class="sec">Transactions</h3>
+      <div class="note bad" id="buxNote"></div>
+      <div id="buxList"></div>
+    </section>
+    <section class="page" id="notifs">
+      <h2>Notifications</h2>
+      <div id="nlist"></div>
+    </section>
+    <section class="page" id="admin">
+      <h2>Admin</h2>
+      <h3 class="sec">Ban player</h3>
+      <div class="box">
+        <input class="inp" id="bnUser" type="text" placeholder="Username" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false">
+        <div style="display:flex;gap:8px"><input class="inp" id="bnNum" type="text" inputmode="numeric" placeholder="Length" maxlength="5" autocomplete="off"><select id="bnUnit"><option>minutes</option><option>hours</option><option selected>days</option><option>months</option><option>years</option></select></div>
+        <input class="inp" id="bnReason" type="text" placeholder="Reason" maxlength="200" autocomplete="off">
+        <button class="go" id="bnBan">Ban</button>
+        <button class="go alt" id="bnUnban">Unban</button>
+        <div class="note" id="bnNote"></div>
+      </div>
+      <h3 class="sec">Delete account</h3>
+      <div class="box">
+        <input class="inp" id="daUser" type="text" placeholder="Username" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false">
+        <input class="inp" id="daReason" type="text" placeholder="Reason" maxlength="200" autocomplete="off">
+        <button class="go" id="daGo">Delete account forever</button>
+        <div class="note" id="daNote"></div>
+      </div>
+      <h3 class="sec">Delete item</h3>
+      <div class="box">
+        <input class="inp" id="adIQ" type="text" placeholder="Item name" maxlength="30" autocomplete="off" spellcheck="false">
+        <input class="inp" id="adIReason" type="text" placeholder="Reason" maxlength="200" autocomplete="off">
+        <button class="go" id="adISearch">Search items</button>
+        <div class="note" id="adINote"></div>
+      </div>
+      <div id="adItems"></div>
+      <h3 class="sec">Delete game</h3>
+      <div class="box">
+        <input class="inp" type="text" placeholder="Game name" disabled>
+        <input class="inp" type="text" placeholder="Reason" disabled>
+        <button class="go alt" disabled>Delete game</button>
+        <div class="note">Games are not available yet</div>
+      </div>
+    </section>
+    <section class="page" id="create">
+      <h2>Create</h2>
+      <div class="tabs" id="ctabs"></div>
+      <div class="tabs sub" id="csubs"></div>
+      <div class="empty" id="cgames" style="display:none">Game creation is coming soon</div>
+      <div class="av" id="ced">
+        <div class="stage ns"><div class="cvw"><svg id="guide" viewBox="0 0 260 280"></svg><canvas id="cv"></canvas></div></div>
+        <div class="panel col">
+          <div class="tabs" id="tools"><button class="on" data-t="pen">Pencil</button><button data-t="erase">Eraser</button><button data-t="fill">Fill</button><button data-t="clear">Clear</button></div>
+          <div class="pal" id="pal"></div>
+          <input class="inp" id="cName" type="text" placeholder="Item name" maxlength="30" autocomplete="off" spellcheck="false">
+          <input class="inp" id="cPrice" type="text" inputmode="numeric" placeholder="Price in Bux (0 = free)" maxlength="9" autocomplete="off">
+          <button class="go" id="cPub">Publish to Marketplace</button>
+          <div class="note" id="cNote"></div>
+        </div>
+      </div>
+      <h3 class="sec">Your items</h3>
+      <div class="note" id="mineNote"></div>
+      <div id="mine"></div>
+    </section>
   </main>
 </div>
 <div id="fps">0 FPS</div>
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-$('#bux').textContent=store.get('bux',0);
+$('#bux').textContent=fmtB(store.get('bux',0));
 
 /* Settings state */
 const DEF={music:true,musicVol:50,sfx:true,sfxVol:70,quality:'Medium',fps:false,req:true};
@@ -274,12 +400,16 @@ addEventListener('keydown',init);
 document.addEventListener('visibilitychange',()=>{if(ac)document.hidden?ac.suspend():ac.resume()});
 
 /* Navigation */
-$('#nav').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  $$('#nav button').forEach(x=>x.classList.toggle('on',x===b));
-  $$('.page').forEach(s=>s.classList.toggle('on',s.id===b.dataset.p));
+function go(p){
+  $$('#nav button').forEach(x=>x.classList.toggle('on',x.dataset.p===p));
+  $$('.page').forEach(s=>s.classList.toggle('on',s.id===p));
   init();sfx('nav');
-});
+  dispatchEvent(new CustomEvent('page',{detail:p}));
+}
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.p)});
+$('#bell').addEventListener('click',()=>go('notifs'));
+$('#buxBtn').addEventListener('click',()=>go('buxpage'));
+$('#buxBtn').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go('buxpage')});
 $('.stage').addEventListener('click',()=>{init();sfx('boing')});
 $$('select,input[type=range]').forEach(el=>el.addEventListener('change',()=>sfx('click')));
 
@@ -290,49 +420,69 @@ const FACES={
  smile:'<path d="M134 144Q155 166 176 144" stroke="#000" stroke-width="7" fill="none" stroke-linecap="round"/>'
 };
 const COLORS=['#FFD60A','#FF9F0A','#FF453A','#FF6FB5','#BF5AF2','#5E5CE6','#0A84FF','#32D2F0','#30D158','#A2845E','#FFFFFF','#8E8E93'];
+const SLOT={Shirts:'shirt',Pants:'pants',Jackets:'jacket',Shoes:'shoes',Hats:'hat',Back:'back',Front:'front',Neck:'neck',Waist:'waist',Faces:'face'};
+const SLOTS=Object.values(SLOT);
+const CLIP=['pants','shirt','jacket','shoes'];
+const GW=52,GH=56,CS=8;
+const PAL=['#000000','#FFFFFF','#8E8E93','#3A3A3C','#FF453A','#FF9F0A','#FFD60A','#30D158','#0A84FF','#5E5CE6','#BF5AF2','#FF6FB5','#A2845E','#6B4423','#32D2F0','#B7F5C1','#7A0F1B','#1E3A8A','#064E3B','#F5E6C8','#FF7A59','#C0C0C0','#FFB6C1','#2D2D2D'];
+const CH='ABCDEFGHIJKLMNOPQRSTUVWX';
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtB=n=>Number(n).toLocaleString('en-US');
+let OWN=[];const ITEMS={};
+function px(a){let o='';if(typeof a!=='string')return o;for(let r=0;r<GH;r++){let c=0;while(c<GW){const ch=a[r*GW+c],i=CH.indexOf(ch);if(!ch||i<0){c++;continue}let n=1;while(c+n<GW&&a[r*GW+c+n]===ch)n++;o+=`<rect x="${c*5}" y="${r*5}" width="${n*5}" height="5" fill="${PAL[i]}"/>`;c+=n}}return o}
+function ghost(a){return `<g transform="rotate(6 135 135)"><path d="${BEAN}" fill="rgba(255,214,10,.10)" stroke="#FFD60A" stroke-opacity=".35" stroke-width="3" stroke-dasharray="7 7"/><g shape-rendering="crispEdges">${px(a)}</g></g>`}
+function eqArts(eq){const o={};for(const k in eq){const it=ITEMS[eq[k]];if(it&&OWN.some(x=>x.id===it.id))o[k]=it.art}return o}
 const tree={
  Body:{Color:COLORS,Faces:Object.keys(FACES)},
  Clothing:{Shirts:[],Pants:[],Jackets:[],Shoes:[]},
  Accessories:{Hats:[],Back:[],Front:[],Neck:[],Waist:[]}
 };
-const av=Object.assign({color:'#FFD60A',face:'smile'},store.get('avatar',{}));
+const av=Object.assign({color:'#FFD60A',face:'smile',eq:{}},store.get('avatar',{}));
 if(!FACES[av.face])av.face='smile';
+function cleanEq(e){const o={};if(e&&typeof e==='object')for(const k of SLOTS){if(typeof e[k]==='string')o[k]=e[k]}return o}
+av.eq=cleanEq(av.eq);
 let cat='Body',sub='Color';
-function beanSVG(face,color,small){
+function beanSVG(face,color,eq){
+  eq=eq||{};
   const id='c'+Math.random().toString(36).slice(2,7);
+  const L=k=>eq[k]?`<g shape-rendering="crispEdges"${CLIP.includes(k)?` clip-path="url(#${id})"`:''}>${px(eq[k])}</g>`:'';
   return `<defs><clipPath id="${id}"><path d="${BEAN}"/></clipPath></defs>
   <ellipse cx="135" cy="262" rx="70" ry="10" fill="#000" opacity=".45"/>
   <g transform="rotate(6 135 135)">
+    ${L('back')}
     <path d="${BEAN}" fill="${color}"/>
     <g clip-path="url(#${id})"><ellipse cx="200" cy="275" rx="130" ry="95" fill="#000" opacity=".14"/><ellipse cx="100" cy="62" rx="14" ry="30" fill="#fff" opacity=".4" transform="rotate(25 100 62)"/></g>
-    ${EYES}
-    ${FACES[face]}
+    ${L('pants')}${L('shoes')}${L('shirt')}${L('waist')}${L('jacket')}${L('neck')}
+    ${eq.face?`<g shape-rendering="crispEdges">${px(eq.face)}</g>`:EYES+FACES[face]}
+    ${L('front')}${L('hat')}
   </g>`;
 }
-function draw(){$('#preview').innerHTML=beanSVG(av.face,av.color)}
+function draw(){$('#preview').innerHTML=beanSVG(av.face,av.color,eqArts(av.eq))}
+function ownBtns(sub){return OWN.filter(i=>i.sub===sub).map(i=>`<button class="item ${av.eq[SLOT[sub]]===i.id?'on':''}" data-i="${esc(i.id)}"><svg viewBox="0 0 260 280">${ghost(i.art)}</svg>${esc(i.name)}</button>`).join('')}
 function render(){
   $('#tabs').innerHTML=Object.keys(tree).map(t=>`<button class="${t===cat?'on':''}" data-t="${t}">${t}</button>`).join('');
   $('#subs').innerHTML=Object.keys(tree[cat]).map(t=>`<button class="${t===sub?'on':''}" data-s="${t}">${t}</button>`).join('');
   const list=tree[cat][sub];
   if(sub==='Color')$('#items').innerHTML=list.map(c=>`<button class="sw2 ${av.color===c?'on':''}" data-c="${c}" style="background:${c}" aria-label="${c}"></button>`).join('');
-  else if(sub==='Faces')$('#items').innerHTML=list.map(f=>`<button class="item ${av.face===f?'on':''}" data-f="${f}"><svg viewBox="105 80 100 100">${(EYES+FACES[f]).split('#000').join('#FFD60A')}</svg>${f[0].toUpperCase()+f.slice(1)}</button>`).join('');
-  else $('#items').innerHTML='';
+  else if(sub==='Faces')$('#items').innerHTML=list.map(f=>`<button class="item ${av.face===f&&!av.eq.face?'on':''}" data-f="${f}"><svg viewBox="105 80 100 100">${(EYES+FACES[f]).split('#000').join('#FFD60A')}</svg>${f[0].toUpperCase()+f.slice(1)}</button>`).join('')+ownBtns('Faces');
+  else $('#items').innerHTML=ownBtns(sub)||'<div class="empty" style="grid-column:1/-1">You do not own any items here. Get some in the Marketplace.</div>';
 }
 $('#tabs').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;cat=t;sub=Object.keys(tree[t])[0];render();sfx('click')});
 $('#subs').addEventListener('click',e=>{const t=e.target.dataset.s;if(!t)return;sub=t;render();sfx('click')});
 $('#items').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.c)av.color=b.dataset.c;
-  if(b.dataset.f)av.face=b.dataset.f;
+  if(b.dataset.f){av.face=b.dataset.f;delete av.eq.face}
+  if(b.dataset.i){const it=ITEMS[b.dataset.i];if(it){const sl=SLOT[it.sub];if(av.eq[sl]===it.id)delete av.eq[sl];else av.eq[sl]=it.id}}
   store.set('avatar',av);render();draw();sfx('click');if(window.BEANZ&&BEANZ.save)BEANZ.save();
 });
 render();draw();
 window.BEANZ={
-  get(){return{bux:store.get('bux',0),avatar:{color:av.color,face:av.face},settings:Object.assign({},st)}},
+  get(){return{bux:store.get('bux',0),avatar:{color:av.color,face:av.face,eq:Object.assign({},av.eq)},settings:Object.assign({},st)}},
   set(d){
     const b=Number.isInteger(d.bux)&&d.bux>=0?d.bux:0;
-    store.set('bux',b);$('#bux').textContent=b;
-    Object.assign(av,{color:'#FFD60A',face:'smile'},d.avatar||{});
+    store.set('bux',b);$('#bux').textContent=fmtB(b);
+    Object.assign(av,{color:'#FFD60A',face:'smile',eq:{}},d.avatar||{});av.eq=cleanEq(av.eq);
     if(!FACES[av.face])av.face='smile';
     store.set('avatar',av);render();draw();
     const ns=Object.assign({},DEF);
@@ -343,6 +493,73 @@ window.BEANZ={
   },
   save:null
 };
+
+Object.assign(window.BEANZ,{
+  inv(list,reset){
+    OWN=list||[];OWN.forEach(i=>ITEMS[i.id]=i);
+    let ch=false;
+    if(!reset)for(const k of Object.keys(av.eq)){if(!OWN.some(i=>i.id===av.eq[k])){delete av.eq[k];ch=true}}
+    store.set('avatar',av);render();draw();
+    if(ch&&BEANZ.save)BEANZ.save();
+  },
+  addBux(d){const b=Math.max(0,store.get('bux',0)+d);store.set('bux',b);$('#bux').textContent=fmtB(b);return b},
+  itemSVG:a=>ghost(a),
+  avatarSVG:over=>beanSVG(av.face,av.color,Object.assign(eqArts(av.eq),over||{}))
+});
+
+/* Create: pixel editor */
+const CT={Games:[],Clothing:['Shirts','Pants','Jackets','Shoes'],Accessories:['Hats','Back','Front','Neck','Waist'],Faces:['Faces']};
+let ccat='Clothing',csub='Shirts';
+function crender(){
+  $('#ctabs').innerHTML=Object.keys(CT).map(t=>`<button class="${t===ccat?'on':''}" data-t="${t}">${t}</button>`).join('');
+  const subs=CT[ccat];
+  $('#csubs').style.display=subs.length>1?'':'none';
+  $('#csubs').innerHTML=subs.map(t=>`<button class="${t===csub?'on':''}" data-s="${t}">${t}</button>`).join('');
+  $('#cgames').style.display=ccat==='Games'?'':'none';
+  $('#ced').style.display=ccat==='Games'?'none':'';
+}
+$('#ctabs').addEventListener('click',e=>{const t=e.target.dataset.t;if(!t)return;ccat=t;csub=CT[t][0]||'';crender();sfx('click')});
+$('#csubs').addEventListener('click',e=>{const t=e.target.dataset.s;if(!t)return;csub=t;crender();sfx('click')});
+crender();
+window.ED=(()=>{
+  const cv=$('#cv'),g=cv.getContext('2d');
+  cv.width=GW*CS;cv.height=GH*CS;
+  let a=new Array(GW*GH).fill('.'),tool='pen',col=6,down=false,last=null;
+  $('#guide').innerHTML=`<g transform="rotate(6 135 135)"><path d="${BEAN}" fill="rgba(255,214,10,.08)" stroke="#FFD60A" stroke-opacity=".3" stroke-width="2" stroke-dasharray="6 6"/></g>`;
+  $('#pal').innerHTML=PAL.map((c,i)=>`<button class="sw2 ${i===col?'on':''}" data-c="${i}" style="background:${c}" aria-label="${c}"></button>`).join('');
+  function paint(){
+    g.clearRect(0,0,cv.width,cv.height);
+    for(let r=0;r<GH;r++)for(let c=0;c<GW;c++){const ch=a[r*GW+c];if(ch!=='.'){g.fillStyle=PAL[CH.indexOf(ch)];g.fillRect(c*CS,r*CS,CS,CS)}}
+    g.strokeStyle='rgba(255,255,255,.07)';g.lineWidth=1;g.beginPath();
+    for(let i=0;i<=GW;i++){g.moveTo(i*CS+.5,0);g.lineTo(i*CS+.5,cv.height)}
+    for(let i=0;i<=GH;i++){g.moveTo(0,i*CS+.5);g.lineTo(cv.width,i*CS+.5)}
+    g.stroke();
+  }
+  function cell(e){const r=cv.getBoundingClientRect();return[Math.max(0,Math.min(GW-1,Math.floor((e.clientX-r.left)/r.width*GW))),Math.max(0,Math.min(GH-1,Math.floor((e.clientY-r.top)/r.height*GH)))]}
+  const put=(x,y)=>{a[y*GW+x]=tool==='erase'?'.':CH[col]};
+  function line(p,q){let[x0,y0]=p;const[x1,y1]=q,dx=Math.abs(x1-x0),dy=Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let e=dx-dy;for(;;){put(x0,y0);if(x0===x1&&y0===y1)break;const e2=2*e;if(e2>-dy){e-=dy;x0+=sx}if(e2<dx){e+=dx;y0+=sy}}}
+  function fill(x,y){const t=a[y*GW+x],n=CH[col];if(t===n)return;const st=[[x,y]];while(st.length){const[cx,cy]=st.pop();if(cx<0||cy<0||cx>=GW||cy>=GH||a[cy*GW+cx]!==t)continue;a[cy*GW+cx]=n;st.push([cx+1,cy],[cx-1,cy],[cx,cy+1],[cx,cy-1])}}
+  cv.addEventListener('pointerdown',e=>{
+    e.preventDefault();cv.setPointerCapture(e.pointerId);
+    const p=cell(e);
+    if(tool==='fill'){fill(p[0],p[1])}else{down=true;last=p;line(p,p)}
+    paint();
+  });
+  cv.addEventListener('pointermove',e=>{if(!down)return;const p=cell(e);line(last,p);last=p;paint()});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{down=false}));
+  $('#tools').addEventListener('click',e=>{
+    const t=e.target.dataset.t;if(!t)return;
+    if(t==='clear'){a.fill('.');paint();sfx('click');return}
+    tool=t;$$('#tools button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));sfx('click');
+  });
+  $('#pal').addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    col=+b.dataset.c;if(tool==='erase'){tool='pen';$$('#tools button').forEach(x=>x.classList.toggle('on',x.dataset.t==='pen'))}
+    $$('#pal button').forEach(x=>x.classList.toggle('on',x===b));sfx('click');
+  });
+  paint();
+  return{cat:()=>ccat,sub:()=>csub,art:()=>a.some(c=>c!=='.')?a.join(''):null,clear(){a.fill('.');paint()}};
+})();
 
 /* FPS */
 let fr=0,lt=performance.now();
@@ -646,6 +863,351 @@ $("#fq").addEventListener("input",()=>{
   },300);
 });
 
+/* ===== Marketplace, Create, Bux, Notifications, Admin ===== */
+const ADMIN_EMAIL="beanz@beanz.game",MAXP=999000000;
+const isAdmin=()=>!!auth.currentUser&&auth.currentUser.email===ADMIN_EMAIL;
+const M={subs:[],owned:[],claiming:new Set(),notifs:[],newIds:new Set(),items:[],cat:"All",q:"",cur:null,tryOn:false,page:"games"};
+const tms=t=>t&&t.toMillis?t.toMillis():Date.now();
+const dts=t=>new Date(tms(t)).toLocaleString();
+const catLabel=(c,s)=>c==="Faces"?"Faces":c+" > "+s;
+const uidNow=()=>auth.currentUser&&auth.currentUser.uid;
+const notify=(uid,text)=>setDoc(doc(collection(db,"notifs")),{to:uid,text,kind:"admin",read:false,createdAt:serverTimestamp()});
+function priceEl(p){const s=mk("span","pr");if(p===0){s.textContent="Free";return s}s.append(mk("i",null,"B"),document.createTextNode(fmtB(p)));return s}
+function svgOf(inner){return '<svg viewBox="0 0 260 280">'+inner+'</svg>'}
+
+function startMarket(user){
+  stopMarket();
+  const col=n=>collection(db,n),er=e=>console.error(e),uid=user.uid;
+  document.querySelector('#nav [data-p="admin"]').style.display=isAdmin()?"flex":"none";
+  loadOwned();
+  M.subs=[
+    onSnapshot(query(col("notifs"),where("to","==",uid)),s=>{
+      M.notifs=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));
+      if(M.page==="notifs"){M.notifs.filter(n=>!n.read).forEach(n=>M.newIds.add(n.id));markRead();renderNotifs()}
+      notifBadge();
+    },er),
+    onSnapshot(query(col("sales"),where("seller","==",uid),where("claimed","==",false)),claimSales,er),
+    onSnapshot(doc(db,"bans",uid),s=>{const b=s.exists()?s.data():null;if(banned(b))showBan(b);else $("#ban").classList.add("hide")},er)
+  ];
+}
+function stopMarket(){
+  M.subs.forEach(u=>u());M.subs=[];M.owned=[];M.notifs=[];M.newIds=new Set();M.items=[];M.cur=null;
+  window.BEANZ.inv([],true);notifBadge();
+  const a=document.querySelector('#nav [data-p="admin"]');if(a)a.style.display="none";
+  ["#mlist","#mine","#buxList","#buxStats","#nlist","#adItems"].forEach(i=>$(i).textContent="");
+}
+
+/* Bans */
+const banned=b=>!!b&&(b.perm===true||b.until>Date.now());
+function showBan(b){
+  $("#banMsg").textContent=b.deleted?"This account was deleted":b.perm?"This account is banned":"You are banned until "+new Date(b.until).toLocaleString();
+  $("#banReason").textContent=b.reason?"Reason: "+b.reason:"";
+  $("#ban").classList.remove("hide");
+}
+async function checkBan(user){
+  try{const s=await getDoc(doc(db,"bans",user.uid));if(s.exists()&&banned(s.data())){showBan(s.data());return true}}catch(e){console.error(e)}
+  return false;
+}
+$("#banOut").addEventListener("click",()=>{click();signOut(auth)});
+
+/* Inventory */
+async function loadOwned(){
+  try{
+    const uid=uidNow();
+    const s=await getDocs(query(collection(db,"owned"),where("uid","==",uid)));
+    const its=await Promise.all(s.docs.map(async d=>{const x=await getDoc(doc(db,"items",d.data().itemId));return x.exists()?{id:x.id,...x.data()}:null}));
+    if(uidNow()!==uid)return;
+    M.owned=its.filter(Boolean);window.BEANZ.inv(M.owned);
+  }catch(e){console.error("Owned:",e)}
+}
+async function claimSales(s){
+  const docs=s.docs.filter(d=>!M.claiming.has(d.id)&&d.data().claimed===false&&d.data().price>0).slice(0,400);
+  if(!docs.length||!userRef)return;
+  docs.forEach(d=>M.claiming.add(d.id));
+  const total=docs.reduce((a,d)=>a+d.data().price,0),nb=window.BEANZ.addBux(total);
+  try{
+    const b=writeBatch(db);
+    b.update(userRef,{bux:nb});
+    docs.forEach(d=>b.update(d.ref,{claimed:true}));
+    await b.commit();
+  }catch(e){window.BEANZ.addBux(-total);console.error("Claim:",e)}
+  docs.forEach(d=>M.claiming.delete(d.id));
+}
+
+/* Notifications */
+function notifBadge(){const n=M.notifs.filter(x=>!x.read).length;$("#ncount").textContent=n>99?"99+":n||""}
+function markRead(){
+  const un=M.notifs.filter(n=>!n.read).slice(0,400);if(!un.length)return;
+  const b=writeBatch(db);un.forEach(n=>b.update(doc(db,"notifs",n.id),{read:true}));
+  b.commit().catch(e=>console.error(e));
+}
+function renderNotifs(){
+  const frag=document.createDocumentFragment();
+  const l=[...M.notifs].sort((a,b)=>tms(b.createdAt)-tms(a.createdAt));
+  if(!l.length)frag.append(mk("div","empty","No notifications"));
+  l.forEach(n=>{const el=mk("div","pc"+(M.newIds.has(n.id)?" new":"")),nm=mk("div","pn");nm.append(mk("div","nt",n.text),mk("small",null,dts(n.createdAt)));el.append(nm);frag.append(el)});
+  $("#nlist").replaceChildren(frag);
+}
+
+/* Marketplace */
+async function loadMarket(){
+  const note=$("#mnote");
+  try{
+    const s=await getDocs(query(collection(db,"items"),orderBy("createdAt","desc"),limit(200)));
+    M.items=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));
+    if(M.cur){const c=M.items.find(x=>x.id===M.cur.id);if(c){M.cur=c;renderDetail()}}
+    renderMarket();
+  }catch(e){console.error(e);say(note,"Could not load items",true)}
+}
+function itemCard(it,fn){
+  const b=mk("button","item mc");b.innerHTML=svgOf(window.BEANZ.itemSVG(it.art));
+  b.append(mk("b",null,it.name),mk("small",null,"by "+it.creatorName),priceEl(it.price));
+  b.onclick=fn;return b;
+}
+function renderMarket(){
+  const q=M.q.toLowerCase(),frag=document.createDocumentFragment();
+  const l=M.items.filter(i=>(M.cat==="All"||i.cat===M.cat)&&(!q||i.name.toLowerCase().includes(q)));
+  l.forEach(i=>frag.append(itemCard(i,()=>openItem(i))));
+  if(!l.length){const e=mk("div","empty","No items found");e.style.gridColumn="1/-1";frag.append(e)}
+  $("#mlist").replaceChildren(frag);
+}
+function showList(){M.cur=null;$("#mdet").style.display="none";$("#mlistv").style.display="";say($("#mnote"),"")}
+function openItem(it){M.cur=it;M.tryOn=false;say($("#mnote"),"");$("#mlistv").style.display="none";$("#mdet").style.display="";renderDetail()}
+function renderDetail(){
+  const it=M.cur;if(!it)return;
+  const own=M.owned.some(o=>o.id===it.id);
+  $("#mstage").innerHTML=M.tryOn?window.BEANZ.avatarSVG({[SLOT[it.sub]]:it.art}):window.BEANZ.itemSVG(it.art);
+  $("#mname").textContent=it.name;
+  $("#mby").textContent="by "+it.creatorName;
+  $("#mcat").textContent=catLabel(it.cat,it.sub);
+  $("#mprice").replaceChildren(priceEl(it.price));
+  const b=$("#mbuy");b.textContent=own?"Owned":"Buy";b.disabled=own;
+  $("#mtry").textContent=M.tryOn?"Show item":"Try On";
+  $("#madm").style.display=isAdmin()?"":"none";
+}
+$("#mq").addEventListener("input",()=>{M.q=$("#mq").value.trim();renderMarket()});
+$("#mtabs").addEventListener("click",e=>{
+  const c=e.target.dataset.c;if(!c)return;M.cat=c;
+  document.querySelectorAll("#mtabs button").forEach(b=>b.classList.toggle("on",b.dataset.c===c));
+  click();renderMarket();
+});
+$("#mback").addEventListener("click",()=>{click();showList()});
+$("#mtry").addEventListener("click",()=>{click();M.tryOn=!M.tryOn;renderDetail()});
+$("#mbuy").addEventListener("click",async()=>{
+  const it=M.cur,note=$("#mnote"),btn=$("#mbuy");
+  if(!it||M.owned.some(o=>o.id===it.id))return;
+  btn.disabled=true;
+  try{
+    const x=await getDoc(doc(db,"items",it.id));
+    if(!x.exists()){say(note,"This item no longer exists",true);showList();loadMarket();return}
+    const f={id:x.id,...x.data()};
+    if(f.price!==it.price){M.cur=f;renderDetail();say(note,"The price has changed. Check it and try again",true);return}
+    if(window.BEANZ.get().bux<f.price){say(note,"Not enough Bux",true);return}
+    const u=auth.currentUser,sid=u.uid+"_"+f.id,nb=window.BEANZ.addBux(-f.price);
+    try{
+      const b=writeBatch(db);
+      b.update(userRef,{bux:nb});
+      b.set(doc(db,"sales",sid),{itemId:f.id,itemName:f.name,seller:f.creator,sellerName:f.creatorName,buyer:u.uid,buyerName:$("#who").textContent.slice(0,20),price:f.price,claimed:f.price===0,createdAt:serverTimestamp()});
+      b.set(doc(db,"owned",sid),{uid:u.uid,itemId:f.id,createdAt:serverTimestamp()});
+      await b.commit();
+      click();M.owned.push(f);window.BEANZ.inv(M.owned);say(note,"Bought!");
+    }catch(e){window.BEANZ.addBux(f.price);console.error(e);say(note,e.code==="permission-denied"?"You cannot buy this item":"Something went wrong",true)}
+  }catch(e){console.error(e);say(note,"Something went wrong",true)}
+  finally{renderDetail()}
+});
+$("#madm").addEventListener("click",()=>{if(M.cur)adminDeleteItem(M.cur,"",$("#mnote"))});
+
+/* Bux page */
+async function loadBux(){
+  const uid=uidNow(),note=$("#buxNote");
+  try{
+    const col=collection(db,"sales");
+    const [a,b]=await Promise.all([getDocs(query(col,where("buyer","==",uid))),getDocs(query(col,where("seller","==",uid)))]);
+    const rows=[];
+    a.docs.forEach(d=>{const x=d.data({serverTimestamps:"estimate"});rows.push({t:tms(x.createdAt),buy:true,x})});
+    b.docs.forEach(d=>{const x=d.data({serverTimestamps:"estimate"});rows.push({t:tms(x.createdAt),buy:false,x})});
+    rows.sort((p,q)=>q.t-p.t);
+    const now=new Date(),day=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+    const starts=[["Today",day],["This week",day-((now.getDay()+6)%7)*864e5],["This month",new Date(now.getFullYear(),now.getMonth(),1).getTime()],["This year",new Date(now.getFullYear(),0,1).getTime()],["All time",0]];
+    const frag=document.createDocumentFragment();
+    starts.forEach(([n,t0])=>{
+      const sum=rows.filter(r=>!r.buy&&r.t>=t0).reduce((s,r)=>s+r.x.price,0);
+      const row=mk("div","row");row.append(mk("span",null,n),priceEl(sum||0));
+      if(!sum)row.lastChild.replaceChildren(mk("i",null,"B"),document.createTextNode("0"));
+      frag.append(row);
+    });
+    $("#buxStats").replaceChildren(frag);
+    const lf=document.createDocumentFragment();
+    if(!rows.length)lf.append(mk("div","empty","No transactions yet"));
+    rows.forEach(r=>{
+      const row=mk("div","row"),l=mk("div","pn"),x=r.x;
+      l.append(mk("div","nt",r.buy?'Bought "'+x.itemName+'"':x.buyerName+' bought "'+x.itemName+'"'),mk("small",null,(r.buy?"from "+x.sellerName:"from you")+" · "+dts(x.createdAt)));
+      const v=mk("b",null,x.price===0?"Free":(r.buy?"-":"+")+fmtB(x.price));
+      if(r.buy&&x.price>0)v.style.color="#ff6b5e";
+      row.append(l,v);lf.append(row);
+    });
+    $("#buxList").replaceChildren(lf);
+    say(note,"");
+  }catch(e){console.error(e);say(note,"Could not load transactions",true)}
+}
+
+/* Create: publish + your items */
+$("#cPub").addEventListener("click",async()=>{
+  const note=$("#cNote"),name=$("#cName").value.trim(),pv=$("#cPrice").value.trim();
+  const cat=ED.cat(),sub=ED.sub(),art=ED.art();
+  if(!name||name.length>30){say(note,"Name: 1-30 characters",true);return}
+  if(!/^\d{1,9}$/.test(pv)||+pv>MAXP){say(note,"Price: 0 to 999,000,000 Bux",true);return}
+  if(!art){say(note,"Draw something first",true);return}
+  const u=auth.currentUser;if(!u)return;
+  $("#cPub").disabled=true;
+  try{
+    const ref=doc(collection(db,"items")),b=writeBatch(db),cn=$("#who").textContent.slice(0,20);
+    b.set(ref,{name,cat,sub,price:+pv,creator:u.uid,creatorName:cn,art,createdAt:serverTimestamp()});
+    b.set(doc(db,"owned",u.uid+"_"+ref.id),{uid:u.uid,itemId:ref.id,createdAt:serverTimestamp()});
+    await b.commit();
+    click();
+    M.owned.push({id:ref.id,name,cat,sub,price:+pv,creator:u.uid,creatorName:cn,art});
+    window.BEANZ.inv(M.owned);
+    ED.clear();$("#cName").value="";$("#cPrice").value="";
+    say(note,"Published to the Marketplace!");loadMine();
+  }catch(e){console.error(e);say(note,e.code==="permission-denied"?"Not allowed":"Something went wrong",true)}
+  $("#cPub").disabled=false;
+});
+async function loadMine(){
+  const uid=uidNow(),note=$("#mineNote");
+  try{
+    const s=await getDocs(query(collection(db,"items"),where("creator","==",uid)));
+    const l=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})})).sort((a,b)=>tms(b.createdAt)-tms(a.createdAt));
+    const frag=document.createDocumentFragment();
+    if(!l.length)frag.append(mk("div","empty","You have not created any items yet"));
+    l.forEach(it=>frag.append(mineRow(it)));
+    $("#mine").replaceChildren(frag);
+  }catch(e){console.error(e);say(note,"Could not load your items",true)}
+}
+function mineRow(it){
+  const el=mk("div","pc"),av=mk("div","pav"),nm=mk("div","pn"),ac=mk("div","pa"),note=$("#mineNote");
+  av.innerHTML=svgOf(window.BEANZ.itemSVG(it.art));
+  const n=mk("input","inp sm"),p=mk("input","inp sm");
+  n.value=it.name;n.maxLength=30;p.value=String(it.price);p.inputMode="numeric";p.maxLength=9;
+  nm.append(mk("small",null,catLabel(it.cat,it.sub)),n,p);
+  const sv=mk("button","fb","Save"),dl=mk("button","fb alt","Delete");
+  sv.onclick=async()=>{
+    const name=n.value.trim(),pv=p.value.trim();
+    if(!name||name.length>30){say(note,"Name: 1-30 characters",true);return}
+    if(!/^\d{1,9}$/.test(pv)||+pv>MAXP){say(note,"Price: 0 to 999,000,000 Bux",true);return}
+    try{await updateDoc(doc(db,"items",it.id),{name,price:+pv});click();say(note,"Saved");
+      const o=M.owned.find(x=>x.id===it.id);if(o){o.name=name;o.price=+pv;window.BEANZ.inv(M.owned)}}
+    catch(e){console.error(e);say(note,"Something went wrong",true)}
+  };
+  dl.onclick=async()=>{
+    if(!confirm("Delete this item? Everyone who owns it will lose it."))return;
+    try{await deleteDoc(doc(db,"items",it.id));click();M.owned=M.owned.filter(x=>x.id!==it.id);window.BEANZ.inv(M.owned);say(note,"Deleted");loadMine()}
+    catch(e){console.error(e);say(note,"Something went wrong",true)}
+  };
+  ac.append(sv,dl);el.append(av,nm,ac);return el;
+}
+
+/* Admin */
+const UNIT={minutes:6e4,hours:36e5,days:864e5,months:30*864e5,years:365*864e5};
+async function findUser(name){
+  const n=name.trim().toLowerCase();if(!n)return null;
+  const s=await getDocs(query(collection(db,"profiles"),where("usernameLower","==",n),limit(1)));
+  return s.empty?null:{uid:s.docs[0].id,...s.docs[0].data()};
+}
+const reasonOf=id=>($(id).value.trim()||"No reason given").slice(0,200);
+$("#bnBan").addEventListener("click",async()=>{
+  const note=$("#bnNote");if(!isAdmin())return;
+  const num=+$("#bnNum").value.trim(),unit=$("#bnUnit").value,reason=reasonOf("#bnReason");
+  if(!Number.isInteger(num)||num<1||num>10000){say(note,"Enter a whole number from 1 to 10000",true);return}
+  try{
+    const u=await findUser($("#bnUser").value);
+    if(!u){say(note,"Player not found",true);return}
+    if(u.uid===uidNow()){say(note,"You cannot ban yourself",true);return}
+    const until=Date.now()+num*UNIT[unit];
+    await setDoc(doc(db,"bans",u.uid),{until,perm:false,deleted:false,reason,by:uidNow(),createdAt:serverTimestamp()});
+    await notify(u.uid,"You were banned until "+new Date(until).toLocaleString()+". Reason: "+reason);
+    click();say(note,"@"+u.username+" banned for "+num+" "+unit);
+  }catch(e){console.error(e);say(note,"Something went wrong",true)}
+});
+$("#bnUnban").addEventListener("click",async()=>{
+  const note=$("#bnNote");if(!isAdmin())return;
+  try{
+    const u=await findUser($("#bnUser").value);
+    if(!u){say(note,"Player not found",true);return}
+    await deleteDoc(doc(db,"bans",u.uid));
+    await notify(u.uid,"Your ban was lifted.");
+    click();say(note,"@"+u.username+" unbanned");
+  }catch(e){console.error(e);say(note,"Something went wrong",true)}
+});
+async function delAll(q){
+  const s=await getDocs(q);
+  for(let i=0;i<s.docs.length;i+=400){const b=writeBatch(db);s.docs.slice(i,i+400).forEach(d=>b.delete(d.ref));await b.commit()}
+}
+$("#daGo").addEventListener("click",async()=>{
+  const note=$("#daNote");if(!isAdmin())return;
+  const reason=reasonOf("#daReason");
+  try{
+    const u=await findUser($("#daUser").value);
+    if(!u){say(note,"Player not found",true);return}
+    if(u.uid===uidNow()){say(note,"You cannot delete yourself",true);return}
+    if(!confirm("Delete @"+u.username+" forever? This cannot be undone."))return;
+    const col=n=>collection(db,n),uid=u.uid;
+    await setDoc(doc(db,"bans",uid),{until:0,perm:true,deleted:true,reason,by:uidNow(),createdAt:serverTimestamp()});
+    let fail=0;
+    for(const q of [query(col("items"),where("creator","==",uid)),query(col("friendships"),where("users","array-contains",uid)),query(col("follows"),where("follower","==",uid)),query(col("follows"),where("followed","==",uid)),query(col("requests"),where("from","==",uid)),query(col("requests"),where("to","==",uid))]){
+      try{await delAll(q)}catch(e){fail++;console.error(e)}
+    }
+    try{await deleteDoc(doc(db,"profiles",uid))}catch(e){fail++;console.error(e)}
+    try{await deleteDoc(doc(db,"users",uid))}catch(e){fail++;console.error(e)}
+    click();say(note,"@"+u.username+" was deleted"+(fail?" (some data could not be removed)":""),!!fail);
+  }catch(e){console.error(e);say(note,"Something went wrong",true)}
+});
+async function adminDeleteItem(it,reasonIn,note){
+  if(!isAdmin())return;
+  let reason=reasonIn;
+  if(!reason){const r=prompt('Reason for deleting "'+it.name+'":');if(r===null)return;reason=r.trim()||"No reason given"}
+  reason=reason.slice(0,200);
+  try{
+    await deleteDoc(doc(db,"items",it.id));
+    await notify(it.creator,'Your item "'+it.name+'" was removed. Reason: '+reason);
+    click();say(note,'Deleted "'+it.name+'"');
+    M.items=M.items.filter(x=>x.id!==it.id);M.owned=M.owned.filter(x=>x.id!==it.id);window.BEANZ.inv(M.owned);
+    if(M.cur&&M.cur.id===it.id)showList();
+    renderMarket();renderAdminItems();
+  }catch(e){console.error(e);say(note,"Something went wrong",true)}
+}
+let adQ=[];
+function renderAdminItems(){
+  const frag=document.createDocumentFragment();
+  adQ=adQ.filter(i=>M.items.some(x=>x.id===i.id));
+  adQ.forEach(it=>{
+    const el=mk("div","pc"),av=mk("div","pav"),nm=mk("div","pn"),ac=mk("div","pa");
+    av.innerHTML=svgOf(window.BEANZ.itemSVG(it.art));
+    nm.append(mk("b",null,it.name),mk("small",null,"by "+it.creatorName+" · "+catLabel(it.cat,it.sub)));
+    const d=mk("button","fb","Delete");d.onclick=()=>adminDeleteItem(it,reasonOf("#adIReason"),$("#adINote"));
+    ac.append(d);el.append(av,nm,ac);frag.append(el);
+  });
+  $("#adItems").replaceChildren(frag);
+}
+$("#adISearch").addEventListener("click",async()=>{
+  if(!isAdmin())return;
+  const q=$("#adIQ").value.trim().toLowerCase();
+  await loadMarket();
+  adQ=M.items.filter(i=>!q||i.name.toLowerCase().includes(q));
+  say($("#adINote"),adQ.length?"":"No items found",!adQ.length);
+  renderAdminItems();
+});
+
+/* Pages */
+addEventListener("page",e=>{
+  const p=e.detail;M.page=p;
+  if(!auth.currentUser)return;
+  if(p==="market"){showList();loadMarket()}
+  if(p==="buxpage")loadBux();
+  if(p==="notifs"){M.newIds=new Set(M.notifs.filter(n=>!n.read).map(n=>n.id));markRead();renderNotifs()}
+  if(p==="create")loadMine();
+});
+
 /* Load / save account data */
 async function loadData(user){
   const ref=doc(db,"users",user.uid);
@@ -670,13 +1232,13 @@ async function loadData(user){
     fresh=false;
     window.BEANZ.set(d);
     renderProfile(d);
-    syncProfile();startFriends(user);
+    syncProfile();startFriends(user);startMarket(user);
     window.BEANZ.save=()=>{
       clearTimeout(saveTimer);
       saveTimer=setTimeout(()=>{
         const x=window.BEANZ.get();
         setDoc(ref,{bux:x.bux,avatar:x.avatar,settings:x.settings},{merge:true}).catch(e=>console.error(e));
-        setDoc(doc(db,"profiles",user.uid),{avatar:x.avatar,acceptsRequests:x.settings.req!==false},{merge:true}).catch(e=>console.error(e));
+        setDoc(doc(db,"profiles",user.uid),{avatar:{color:x.avatar.color,face:x.avatar.face},acceptsRequests:x.settings.req!==false},{merge:true}).catch(e=>console.error(e));
       },400);
     };
     if(unsub)unsub();
@@ -699,9 +1261,9 @@ onAuthStateChanged(auth,user=>{
     $("#who").textContent=mainName(user);
     $("#whoUser").textContent="@"+mainName(user);
     a.classList.add("hide");
-    if(!pending)loadData(user);
+    if(!pending)checkBan(user).then(b=>{if(!b&&auth.currentUser===user)loadData(user)});
   }else{
-    userRef=null;stopFriends();
+    userRef=null;stopFriends();stopMarket();$("#ban").classList.add("hide");
     ["#u","#p","#pwOld","#pwNew","#pwNew2","#dn"].forEach(i=>$(i).value="");
     ["#dnNote","#pwNote","#loNote"].forEach(i=>say($(i),""));
     a.classList.remove("hide");
