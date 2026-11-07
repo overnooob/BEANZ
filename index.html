@@ -118,6 +118,7 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
 .empty{opacity:.7;padding:8px 2px}
 #fnote{margin-bottom:8px}
 .pstats{display:flex;gap:18px;font-size:14px;font-weight:700;flex-wrap:wrap}
+.pn .pstats{gap:12px;font-size:12px;font-weight:700;opacity:.7}
 .pa{flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:700px){.pc{flex-wrap:wrap}.pa{width:100%}}
 </style>
@@ -534,7 +535,7 @@ function startFriends(user){
   ];
 }
 function stopFriends(){
-  subs.forEach(u=>u());subs=[];me=null;inc=[];out=[];fr=[];fol=[];fers=0;counts();cache={};rec=[];sres=[];sq="";
+  subs.forEach(u=>u());subs=[];me=null;inc=[];out=[];fr=[];fol=[];fers=0;counts();cache={};Object.keys(sc).forEach(k=>delete sc[k]);rec=[];sres=[];sq="";
   $("#fq").value="";$("#ftabs").style.display="";$("#flist").textContent="";$("#rcount").textContent="";
 }
 async function act(fn){try{await fn();click()}catch(e){fnote(e.lim||(e.code==="permission-denied"?"Not allowed":"Something went wrong"))}}
@@ -550,8 +551,8 @@ const add=uid=>act(async()=>{
 });
 const cancel=uid=>act(()=>deleteDoc(doc(db,"requests",me+"_"+uid)));
 const decline=uid=>act(()=>deleteDoc(doc(db,"requests",uid+"_"+me)));
-const follow=uid=>act(()=>setDoc(doc(db,"follows",me+"_"+uid),{follower:me,followed:uid,createdAt:serverTimestamp()}));
-const unfollow=uid=>act(()=>deleteDoc(doc(db,"follows",me+"_"+uid)));
+const follow=uid=>act(()=>{delete sc[uid];return setDoc(doc(db,"follows",me+"_"+uid),{follower:me,followed:uid,createdAt:serverTimestamp()})});
+const unfollow=uid=>act(()=>{delete sc[uid];return deleteDoc(doc(db,"follows",me+"_"+uid))});
 const unfriend=uid=>act(()=>deleteDoc(doc(db,"friendships",pid(me,uid))));
 const accept=uid=>act(async()=>{
   if(fr.length>=MAX)throw lim("You have reached the limit of 100 friends");
@@ -562,13 +563,23 @@ const accept=uid=>act(async()=>{
   if(out.includes(uid))b.delete(doc(db,"requests",me+"_"+uid));
   await b.commit();
 });
+const sc={};
+async function stats(uid){
+  const c=sc[uid];if(c&&Date.now()-c.t<6e4)return c.d;
+  const col=n=>collection(db,n);
+  const g=async q=>{try{return (await getCountFromServer(q)).data().count}catch(e){return null}};
+  const d=await Promise.all([g(query(col("friendships"),where("users","array-contains",uid))),g(query(col("follows"),where("followed","==",uid))),g(query(col("follows"),where("follower","==",uid)))]);
+  sc[uid]={d,t:Date.now()};return d;
+}
 function mk(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 function card(uid,p){
   const el=mk("div","pc"),av=mk("div","pav"),nm=mk("div","pn"),ac=mk("div","pa");
   const f=p&&p.avatar&&FACES[p.avatar.face]?p.avatar.face:"smile";
   const c=p&&p.avatar&&OKC(p.avatar.color)?p.avatar.color:"#FFD60A";
   av.innerHTML='<svg viewBox="0 0 260 280">'+window.beanSVG(f,c)+'</svg>';
-  nm.append(mk("b",null,p?(p.displayName||p.username):"Unknown"),mk("small",null,p?"@"+p.username:""));
+  const st=mk("div","pstats");
+  nm.append(mk("b",null,p?(p.displayName||p.username):"Unknown"),mk("small",null,p?"@"+p.username:""),st);
+  if(p)stats(uid).then(d=>{["Friends","Followers","Following"].forEach((n,i)=>{if(d[i]!=null)st.append(mk("span",null,n+": "+d[i]))})});
   const btn=(t,fn,alt)=>{const b=mk("button","fb"+(alt?" alt":""),t);b.onclick=()=>fn(uid);ac.append(b)};
   if(fr.includes(uid))btn("Remove",unfriend,1);
   else if(inc.includes(uid)){btn("Accept",accept);btn("Decline",decline,1)}
