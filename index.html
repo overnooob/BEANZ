@@ -319,7 +319,7 @@ aside button[data-p=admin]{display:none}
       <div class="row"><span>Show usernames in game</span><label class="sw"><input type="checkbox" data-k="names" checked><span></span></label></div>
       <h3 class="sec">Privacy</h3>
       <div class="row"><span>Friend requests</span><label class="sw"><input type="checkbox" data-k="req" checked><span></span></label></div>
-      <div class="row"><span>Game likes, dislikes and favorites</span><label class="sw"><input type="checkbox" data-k="gnotif" checked><span></span></label></div>
+      <div class="row"><span>Game likes, dislikes and favorites notifications</span><label class="sw"><input type="checkbox" data-k="gnotif" checked><span></span></label></div>
       <h3 class="sec">Account</h3>
       <div class="box"><div class="pname" id="who"></div><div class="puser" id="whoUser"></div><div class="pstats"><span id="stF">Friends: 0</span><span id="stW">Followers: 0</span><span id="stFo">Following: 0</span></div></div>
       <div class="box">
@@ -2065,7 +2065,7 @@ function svgSprite(key,mkInner){
   im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 280" width="260" height="280">'+inner+'</svg>');
   return null;
 }
-const HAM='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96"><g transform="translate(12 12) rotate(-45) scale(.0132) translate(-442 -960)" fill="#fff"><rect x="50" y="28" width="150" height="210" rx="38"/><path d="M200 70C250 92 295 62 332 32L382 18C522 30 622 82 702 172C762 242 802 312 836 372C760 332 652 292 560 262L505 308L408 314L372 284C338 250 318 236 298 232L200 232Z"/><rect x="372" y="322" width="132" height="22" rx="10"/><rect x="372" y="351" width="132" height="22" rx="10"/><rect x="372" y="380" width="132" height="22" rx="10"/><rect x="384" y="410" width="108" height="520" rx="12"/><path d="M378 945Q400 934 500 941Q526 946 523 990C531 1300 561 1600 556 1800Q551 1862 500 1892Q440 1904 400 1889Q345 1864 352 1792C365 1600 386 1300 378 945Z"/></g></svg>';
+const HAM='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="96" height="96"><g transform="translate(12 12) rotate(-45) scale(.0165) translate(-442 -590)" fill="#fff"><rect x="50" y="28" width="150" height="210" rx="38"/><path d="M200 70C250 92 295 62 332 32L382 18C522 30 622 82 702 172C762 242 802 312 836 372C760 332 652 292 560 262L505 308L408 314L372 284C338 250 318 236 298 232L200 232Z"/><rect x="372" y="322" width="132" height="22" rx="10"/><rect x="372" y="351" width="132" height="22" rx="10"/><rect x="372" y="380" width="132" height="22" rx="10"/><rect x="384" y="410" width="108" height="215" rx="12"/><path d="M378 635Q400 629 500 633Q526 637 523 660C531 830 561 995 556 1105Q551 1139 500 1155Q440 1162 400 1154Q345 1141 352 1101C365 995 386 830 378 635Z"/></g></svg>';
 let hamC=null;
 (function(){const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=96;c.height=96;c.getContext("2d").drawImage(im,0,0,96,96);hamC=c};im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(HAM)})();
 
