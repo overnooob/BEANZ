@@ -149,6 +149,7 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
   <main>
     <section class="page on" id="games"></section>
     <section class="page" id="avatar">
+      <h2>Avatar</h2>
       <div class="av">
         <div class="stage"><svg id="preview" viewBox="0 0 260 280" aria-label="Bean"></svg></div>
         <div class="panel">
@@ -178,7 +179,7 @@ select{background:var(--k);color:var(--y);border:2px solid var(--y);border-radiu
       <h3 class="sec">Privacy</h3>
       <div class="row"><span>Friend requests</span><label class="sw"><input type="checkbox" data-k="req" checked><span></span></label></div>
       <h3 class="sec">Account</h3>
-      <div class="box"><div class="pname" id="who"></div><div class="puser" id="whoUser"></div><div class="pstats"><span id="stF">Friends: 0</span><span id="stW">Followers: 0</span></div></div>
+      <div class="box"><div class="pname" id="who"></div><div class="puser" id="whoUser"></div><div class="pstats"><span id="stF">Friends: 0</span><span id="stW">Followers: 0</span><span id="stFo">Following: 0</span></div></div>
       <div class="box">
         <span>Display name</span>
         <input class="inp" id="dn" type="text" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false">
@@ -349,7 +350,7 @@ apply('fps');
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, collection, query, where, orderBy, limit, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, collection, query, where, orderBy, limit, getDocs, writeBatch, getCountFromServer } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js";
 
 const app=initializeApp({
@@ -520,7 +521,7 @@ async function syncProfile(){
     await setDoc(pr,base,{merge:true});
   }catch(e){console.error("Profile:",e)}
 }
-function counts(){$("#stF").textContent="Friends: "+fr.length;$("#stW").textContent="Followers: "+fers}
+function counts(){$("#stF").textContent="Friends: "+fr.length;$("#stW").textContent="Followers: "+fers;$("#stFo").textContent="Following: "+fol.length}
 function startFriends(user){
   stopFriends();me=user.uid;
   const col=n=>collection(db,n),er=e=>console.error(e);
@@ -529,21 +530,32 @@ function startFriends(user){
     onSnapshot(query(col("requests"),where("from","==",me)),s=>{out=s.docs.map(x=>x.data().to);show()},er),
     onSnapshot(query(col("friendships"),where("users","array-contains",me)),s=>{fr=s.docs.map(x=>x.data().users.find(u=>u!==me));counts();show()},er),
     onSnapshot(query(col("follows"),where("followed","==",me)),s=>{fers=s.size;counts()},er),
-    onSnapshot(query(col("follows"),where("follower","==",me)),s=>{fol=s.docs.map(x=>x.data().followed);show()},er)
+    onSnapshot(query(col("follows"),where("follower","==",me)),s=>{fol=s.docs.map(x=>x.data().followed);counts();show()},er)
   ];
 }
 function stopFriends(){
   subs.forEach(u=>u());subs=[];me=null;inc=[];out=[];fr=[];fol=[];fers=0;counts();cache={};rec=[];sres=[];sq="";
   $("#fq").value="";$("#ftabs").style.display="";$("#flist").textContent="";$("#rcount").textContent="";
 }
-async function act(fn){try{await fn();click()}catch(e){fnote(e.code==="permission-denied"?"Not allowed":"Something went wrong")}}
-const add=uid=>act(()=>setDoc(doc(db,"requests",me+"_"+uid),{from:me,to:uid,createdAt:serverTimestamp()}));
+async function act(fn){try{await fn();click()}catch(e){fnote(e.lim||(e.code==="permission-denied"?"Not allowed":"Something went wrong"))}}
+const MAX=100;
+const lim=m=>{const e=new Error(m);e.lim=m;return e};
+async function cnt(q){try{return (await getCountFromServer(q)).data().count}catch(e){return 0}}
+const friendsOf=uid=>cnt(query(collection(db,"friendships"),where("users","array-contains",uid)));
+const add=uid=>act(async()=>{
+  if(fr.length>=MAX)throw lim("You have reached the limit of 100 friends");
+  if(await friendsOf(uid)>=MAX)throw lim("This player has reached the limit of 100 friends");
+  if(await cnt(query(collection(db,"requests"),where("to","==",uid)))>=MAX)throw lim("This player has too many friend requests");
+  await setDoc(doc(db,"requests",me+"_"+uid),{from:me,to:uid,createdAt:serverTimestamp()});
+});
 const cancel=uid=>act(()=>deleteDoc(doc(db,"requests",me+"_"+uid)));
 const decline=uid=>act(()=>deleteDoc(doc(db,"requests",uid+"_"+me)));
 const follow=uid=>act(()=>setDoc(doc(db,"follows",me+"_"+uid),{follower:me,followed:uid,createdAt:serverTimestamp()}));
 const unfollow=uid=>act(()=>deleteDoc(doc(db,"follows",me+"_"+uid)));
 const unfriend=uid=>act(()=>deleteDoc(doc(db,"friendships",pid(me,uid))));
 const accept=uid=>act(async()=>{
+  if(fr.length>=MAX)throw lim("You have reached the limit of 100 friends");
+  if(await friendsOf(uid)>=MAX)throw lim("This player has reached the limit of 100 friends");
   const b=writeBatch(db),[x,y]=[me,uid].sort();
   b.set(doc(db,"friendships",x+"_"+y),{users:[x,y],createdAt:serverTimestamp()});
   b.delete(doc(db,"requests",uid+"_"+me));
@@ -562,12 +574,12 @@ function card(uid,p){
   else if(inc.includes(uid)){btn("Accept",accept);btn("Decline",decline,1)}
   else if(out.includes(uid))btn("Cancel",cancel,1);
   else if(p&&p.acceptsRequests!==false)btn("Add friend",add);
-  if(p)btn(fol.includes(uid)?"Unfollow":"Follow",fol.includes(uid)?unfollow:follow,1);
+  if(p)btn(fol.includes(uid)?"Unfollow":"Follow",fol.includes(uid)?unfollow:follow,fol.includes(uid));
   el.append(av,nm,ac);return el;
 }
 async function show(){
   const t=++rt,box=$("#flist");
-  $("#rcount").textContent=inc.length||"";
+  $("#rcount").textContent=inc.length>99?"99+":inc.length||"";
   let groups;
   if(sq)groups=[{uids:sres}];
   else if(ftab==="friends")groups=[{uids:fr}];
